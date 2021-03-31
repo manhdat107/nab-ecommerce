@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @MappedSuperclass
@@ -20,10 +21,10 @@ import java.util.Date;
 )
 @Getter
 @Setter
-public abstract class CommonEntity {
+public abstract class CommonEntity<ID extends Number> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private ID id;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -34,7 +35,7 @@ public abstract class CommonEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonIgnore
     private Date lastUpdate;
-    @JsonIgnore
-    private boolean isDelete;
+//    @JsonIgnore
+//    private boolean isDelete;
 
 }

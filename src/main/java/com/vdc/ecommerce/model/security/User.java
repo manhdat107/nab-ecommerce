@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-public class User extends CommonEntity {
+public class User extends CommonEntity<Long> {
     @NotEmpty(message = "username may be not empty.")
     @NotBlank(message = "username may be not blank.")
     @Size(min = 4, message = "must be at least 4 characters")
@@ -27,7 +27,7 @@ public class User extends CommonEntity {
     private String password;
     @Email(message = "Email Invalid, please try again.")
     private String email;
-    private String phoneNumber;
+    private int phoneNumber;
     private String fullName;
     private String address;
 
@@ -40,7 +40,8 @@ public class User extends CommonEntity {
     public User() {
     }
 
-    public User(String username, String password, @Email(message = "Email Invalid, please try again.") String email, String phoneNumber, String fullName, String address) {
+    public User(String username, String password, @Email(message = "Email Invalid, please try again.") String email,
+                int phoneNumber, String fullName, String address) {
         this.username = username;
         this.password = password;
         this.email = email;

@@ -1,22 +1,29 @@
 package com.vdc.ecommerce.model.security;
 
+import com.vdc.ecommerce.common.RoleConstant;
 import com.vdc.ecommerce.model.CommonEntity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
-@Table(name = "roles")
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class Role extends CommonEntity {
+@Entity
+@Table(name = "roles")
+public class Role extends CommonEntity<Long> implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     @NaturalId
     @Column(length = 60)
-    private RoleName name;
+    private RoleConstant name;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,10 +36,9 @@ public class Role extends CommonEntity {
     public int hashCode() {
         return Objects.hash(name);
     }
-}
 
-enum RoleName {
-    ROLE_USER,
-    ROLE_PM,
-    ROLE_ADMIN
+    @Override
+    public String getAuthority() {
+        return name.name();
+    }
 }
