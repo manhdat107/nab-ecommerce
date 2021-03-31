@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://sql6.freemysqlhosting.net:3306/sql6402572
+    username: sql6402572
+    password: dxaYku4QGP
+    initialization-mode: always
+    driver-class-name: com.mysql.jdbc.Driver
+authen:
+  secretKey: FigXRDmiMo2RBtzgTdydkLElfwwWVWe5dsBPIGhUEZRlbkSCwOtCbjCODOpfo7tUJB6L3vEI3hrHVBknR_323AJiZ1O_-688oGp0Vwo-KBSGs-qYGs7a4t4UjcDgQuoByepCzjj01RNbzm9hTskawuweKEGzpHEXsVXRW2qWnls
+  expirationTime: 1800  # second
