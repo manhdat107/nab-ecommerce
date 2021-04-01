@@ -19,8 +19,9 @@ public class ProductController {
     }
 
     @GetMapping(ApiConstant.LIST)
-    public ResponseModel<?> getAllProduct(@RequestParam("pageNumber") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
-        return productService.getAll(pageNum, pageSize);
+    public ResponseModel<?> getAllProduct(@RequestParam("pageNumber") Integer pageNum, @RequestParam("pageSize") Integer pageSize,
+                                          @RequestParam(value = "sortBy", required = false) String field, @RequestParam(value = "isDesc", required = false) boolean isDesc) {
+        return productService.getAll(pageNum, pageSize, field, isDesc);
     }
 
     @PostMapping(ApiConstant.ADD)

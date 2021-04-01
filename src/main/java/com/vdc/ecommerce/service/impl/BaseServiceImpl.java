@@ -1,12 +1,15 @@
 package com.vdc.ecommerce.service.impl;
 
+import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.common.PageConstant;
+import com.vdc.ecommerce.common.ResponseMessage;
 import com.vdc.ecommerce.model.BaseEntity;
 import com.vdc.ecommerce.model.dto.BaseDTO;
 import com.vdc.ecommerce.model.mapper.BaseMapper;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.model.response.ResponsePageableModel;
 import com.vdc.ecommerce.service.IBaseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +29,9 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDT
 
     protected JpaRepository<E, ID> repo;
     protected BaseMapper<E, D> mapper;
+
+    @Autowired
+    protected AppUtils appUtils;
 
     public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper) {
         this.repo = repo;
@@ -60,35 +66,40 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDT
     }
 
     @Override
-    public ResponseModel<List<D>> getAll(Integer pageNum, Integer pageSize) {
-        pageNum = pageNum == null ? PageConstant.PAGE_NUM_DEFAULT.getNum() : pageNum;
-        pageSize = pageSize == null ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : pageSize;
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
+    public ResponseModel<List<D>> getAll(Integer pageNum, Integer pageSize, String field, boolean isDesc) {
+        Pageable pageable;
+
+        if(field == null || field.isEmpty()) {
+            pageable = PageRequest.of(pageNum == null ? PageConstant.PAGE_DEFAULT.getNum() : pageNum,
+                    pageSize == null ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : pageSize);
+        } else {
+            pageable = appUtils.getPageable(pageNum, pageSize, field, isDesc);
+        }
 
         Page<E> ePage = repo.findAll(pageable);
         Page<D> dPage = ePage.map(mapper::toDTO);
         ResponsePageableModel<D> dResponsePageableModel = new ResponsePageableModel<>(dPage.getContent(), dPage.getPageable(), dPage.getTotalElements());
-        return ResponseModel.successful("Get all is success", dResponsePageableModel);
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), dResponsePageableModel);
     }
 
     @Override
     public ResponseModel<D> getById(ID id) {
         Optional<E> eOptional = repo.findById(id);
         if (!eOptional.isPresent()) {
-            return ResponseModel.failure("Not find object with this id", 500);
+            return ResponseModel.failure(ResponseMessage.NOT_FOUND.getMessage(), 500);
         }
         D d = mapper.toDTO(eOptional.get());
-        return ResponseModel.successful("Find it successful", d);
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), d);
     }
 
     @Override
     public ResponseModel<String> deleteById(ID id) {
         Optional<E> eOptional = repo.findById(id);
         if (!eOptional.isPresent()) {
-            return ResponseModel.failure("Not find object with this id", 204);
+            return ResponseModel.failure(ResponseMessage.NOT_FOUND.getMessage(), 204);
         }
         repo.deleteById(id);
-        return ResponseModel.successful(String.format("Delete object successful with id %s", id));
+        return ResponseModel.successful(String.format(ResponseMessage.SUCCESS.getMessage(), id));
     }
 
 }

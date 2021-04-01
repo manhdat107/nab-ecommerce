@@ -18,7 +18,7 @@ public interface IBaseService<D, ID> {
 
     ResponseModel<D> update(D DTO);
 
-    ResponseModel<List<D>> getAll(Integer pageNum, Integer pageSize);
+    ResponseModel<List<D>> getAll(Integer pageNum, Integer pageSize, String field, boolean isDesc);
 
     ResponseModel<D> getById(ID id);
 

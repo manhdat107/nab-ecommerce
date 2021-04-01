@@ -19,8 +19,9 @@ public class BranchController {
     }
 
     @GetMapping(ApiConstant.LIST)
-    public ResponseModel<?> getAllBranch(@RequestParam("pageNumber") Integer pageNumber, @RequestParam("pageSize") Integer pageSize) {
-        return branchService.getAll(pageNumber, pageSize);
+    public ResponseModel<?> getAllBranch(@RequestParam("pageNumber") Integer pageNumber, @RequestParam("pageSize") Integer pageSize,
+                                         @RequestParam(value = "sortBy", required = false) String field, @RequestParam(value = "isDesc", required = false) Boolean isDesc) {
+        return branchService.getAll(pageNumber, pageSize, field, isDesc);
     }
 
     @PostMapping(ApiConstant.ADD)

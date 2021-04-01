@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum PageConstant {
-    PAGE_NUM_DEFAULT(0),
+    PAGE_DEFAULT(0),
 
     PAGE_SIZE_DEFAULT(10);
 
