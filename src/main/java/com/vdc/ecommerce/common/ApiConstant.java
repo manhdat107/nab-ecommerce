@@ -6,6 +6,7 @@ public class ApiConstant {
     public static final String ADMIN = "/admin";
     public static final String BRANCH = "/branch";
     public static final String PRODUCT = "/product";
+    public static final String QUANTITY = "/quantity";
 
     public static final String ACCOUNT = "/account";
     public static final String SIGN_IN = "/signin";

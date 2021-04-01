@@ -14,4 +14,7 @@ public abstract class ProductService extends BaseServiceImpl<Product, ProductDTO
     }
 
     public abstract JsonResponse<String> addProduct(ProductDTO productDTO);
+
+
+    public abstract JsonResponse<String> updateQuantity(Long productId, Long quantity);
 }

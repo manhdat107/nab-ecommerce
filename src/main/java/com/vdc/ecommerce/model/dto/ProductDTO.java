@@ -18,4 +18,6 @@ public class ProductDTO extends BaseDTO<Long> {
     private BigDecimal price;
 
     private Branch branch;
+
+    private QuantityDTO quantityDTO;
 }

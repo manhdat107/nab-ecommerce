@@ -23,4 +23,5 @@ public interface IBaseService<D, ID> {
     JsonResponse<D> getById(ID id);
 
     JsonResponse<String> deleteById(ID id);
+
 }

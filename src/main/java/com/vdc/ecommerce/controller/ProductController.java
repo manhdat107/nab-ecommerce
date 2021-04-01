@@ -38,5 +38,8 @@ public class ProductController {
         return productService.deleteById(productId);
     }
 
-
+    @PutMapping(ApiConstant.UPDATE + ApiConstant.QUANTITY)
+    public JsonResponse<?> updateProductQuantity(@RequestParam Long productId, @RequestParam Long quantity) {
+        return productService.updateQuantity(productId, quantity);
+    }
 }

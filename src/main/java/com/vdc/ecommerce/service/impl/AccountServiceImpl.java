@@ -1,6 +1,6 @@
 package com.vdc.ecommerce.service.impl;
 
-import com.vdc.ecommerce.common.ErrorMessage;
+import com.vdc.ecommerce.common.ResponseMessage;
 import com.vdc.ecommerce.common.RoleConstant;
 import com.vdc.ecommerce.config.security.JwtProvider;
 import com.vdc.ecommerce.model.dto.SignInRequest;
@@ -93,12 +93,12 @@ public class AccountServiceImpl implements IAccountService {
             switch (role) {
                 case "admin":
                     Role adminRole = roleRepository.findByName(RoleConstant.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException(ErrorMessage.AUTH_ROLE_NOT_FIND.getMessage()));
+                            .orElseThrow(() -> new RuntimeException(ResponseMessage.AUTH_ROLE_NOT_FIND.getMessage()));
                     roles.add(adminRole);
                     break;
                 default:
                     Role userRole = roleRepository.findByName(RoleConstant.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException(ErrorMessage.AUTH_ROLE_NOT_FIND.getMessage()));
+                            .orElseThrow(() -> new RuntimeException(ResponseMessage.AUTH_ROLE_NOT_FIND.getMessage()));
                     roles.add(userRole);
             }
         });

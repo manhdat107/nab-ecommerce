@@ -22,5 +22,7 @@ public class Product extends BaseEntity<Long> {
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
 
-    private Long stock;
+    @OneToOne(mappedBy = "product")
+    private Quantity quantity;
+
 }
