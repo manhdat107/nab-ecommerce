@@ -1,6 +1,7 @@
 package com.vdc.ecommerce.controller;
 
 import com.vdc.ecommerce.common.ApiConstant;
+import com.vdc.ecommerce.model.MetricSearch;
 import com.vdc.ecommerce.model.dto.ProductDTO;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.service.ProductService;
@@ -19,9 +20,8 @@ public class ProductController {
     }
 
     @GetMapping(ApiConstant.LIST)
-    public ResponseModel<?> getAllProduct(@RequestParam("pageNumber") Integer pageNum, @RequestParam("pageSize") Integer pageSize,
-                                          @RequestParam(value = "sortBy", required = false) String field, @RequestParam(value = "isDesc", required = false) boolean isDesc) {
-        return productService.getAll(pageNum, pageSize, field, isDesc);
+    public ResponseModel<?> getAllProduct(@RequestBody MetricSearch metricSearch) {
+        return productService.findByPredicate(metricSearch);
     }
 
     @PostMapping(ApiConstant.ADD)

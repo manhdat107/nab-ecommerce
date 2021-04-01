@@ -1,5 +1,6 @@
 package com.vdc.ecommerce.service.impl;
 
+import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.model.Quantity;
 import com.vdc.ecommerce.model.mapper.QuantityMapper;
 import com.vdc.ecommerce.reposirtory.QuantityRepository;
@@ -8,8 +9,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class QuantityServiceImpl extends QuantityService {
-    public QuantityServiceImpl(QuantityRepository repo, QuantityMapper mapper) {
-        super(repo, mapper);
+
+    public QuantityServiceImpl(QuantityRepository repo, QuantityMapper mapper, QuantityRepository queryDsl, AppUtils appUtils) {
+        super(repo, mapper, queryDsl, appUtils);
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +29,15 @@ import java.util.Optional;
 public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDTO<ID>, ID extends Long> implements IBaseService<D, ID> {
 
     protected JpaRepository<E, ID> repo;
+    protected QuerydslPredicateExecutor<E> queryDsl;
     protected BaseMapper<E, D> mapper;
-
-    @Autowired
     protected AppUtils appUtils;
 
-    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper) {
+    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper, QuerydslPredicateExecutor<E> queryDsl, AppUtils appUtils) {
         this.repo = repo;
+        this.queryDsl = queryDsl;
         this.mapper = mapper;
+        this.appUtils = appUtils;
     }
 
     @Override
