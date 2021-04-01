@@ -1,6 +1,6 @@
 package com.vdc.ecommerce.service;
 
-import com.vdc.ecommerce.model.response.JsonResponse;
+import com.vdc.ecommerce.model.response.ResponseModel;
 
 import java.util.List;
 
@@ -12,16 +12,16 @@ import java.util.List;
  * @param <ID> DTO data's id type
  */
 public interface IBaseService<D, ID> {
-    JsonResponse<List<D>> create(List<D> DTOs);
+    ResponseModel<List<D>> create(List<D> DTOs);
 
-    JsonResponse<D> add(D DTO);
+    ResponseModel<D> add(D DTO);
 
-    JsonResponse<D> update(D DTO);
+    ResponseModel<D> update(D DTO);
 
-    JsonResponse<List<D>> getAll(Integer pageNum, Integer pageSize);
+    ResponseModel<List<D>> getAll(Integer pageNum, Integer pageSize);
 
-    JsonResponse<D> getById(ID id);
+    ResponseModel<D> getById(ID id);
 
-    JsonResponse<String> deleteById(ID id);
+    ResponseModel<String> deleteById(ID id);
 
 }

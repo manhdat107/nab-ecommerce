@@ -2,7 +2,7 @@ package com.vdc.ecommerce.controller;
 
 import com.vdc.ecommerce.common.ApiConstant;
 import com.vdc.ecommerce.model.dto.BranchDTO;
-import com.vdc.ecommerce.model.response.JsonResponse;
+import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.service.BranchService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +19,17 @@ public class BranchController {
     }
 
     @GetMapping(ApiConstant.LIST)
-    public JsonResponse<?> getAllBranch(@RequestParam("pageNumber") Integer pageNumber, @RequestParam("pageSize") Integer pageSize) {
+    public ResponseModel<?> getAllBranch(@RequestParam("pageNumber") Integer pageNumber, @RequestParam("pageSize") Integer pageSize) {
         return branchService.getAll(pageNumber, pageSize);
     }
 
     @PostMapping(ApiConstant.ADD)
-    public JsonResponse<?> addNewBranch(@RequestBody BranchDTO branchDTO) {
+    public ResponseModel<?> addNewBranch(@RequestBody BranchDTO branchDTO) {
         return branchService.add(branchDTO);
     }
 
     @DeleteMapping(ApiConstant.DELETE + "/{id}")
-    public JsonResponse<?> deleteBranch(@PathVariable("id") Long id) {
+    public ResponseModel<?> deleteBranch(@PathVariable("id") Long id) {
         return branchService.deleteById(id);
     }
 }

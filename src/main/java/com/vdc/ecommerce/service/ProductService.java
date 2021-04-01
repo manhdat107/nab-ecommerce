@@ -3,7 +3,7 @@ package com.vdc.ecommerce.service;
 import com.vdc.ecommerce.model.Product;
 import com.vdc.ecommerce.model.dto.ProductDTO;
 import com.vdc.ecommerce.model.mapper.ProductMapper;
-import com.vdc.ecommerce.model.response.JsonResponse;
+import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.reposirtory.ProductRepository;
 import com.vdc.ecommerce.service.impl.BaseServiceImpl;
 
@@ -13,8 +13,8 @@ public abstract class ProductService extends BaseServiceImpl<Product, ProductDTO
         super(repository, productMapper);
     }
 
-    public abstract JsonResponse<String> addProduct(ProductDTO productDTO);
+    public abstract ResponseModel<String> addProduct(ProductDTO productDTO);
 
 
-    public abstract JsonResponse<String> updateQuantity(Long productId, Long quantity);
+    public abstract ResponseModel<String> updateQuantity(Long productId, Long quantity);
 }

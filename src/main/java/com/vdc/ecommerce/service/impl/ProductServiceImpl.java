@@ -6,7 +6,7 @@ import com.vdc.ecommerce.model.Product;
 import com.vdc.ecommerce.model.Quantity;
 import com.vdc.ecommerce.model.dto.ProductDTO;
 import com.vdc.ecommerce.model.mapper.ProductMapper;
-import com.vdc.ecommerce.model.response.JsonResponse;
+import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.reposirtory.BranchRepository;
 import com.vdc.ecommerce.reposirtory.ProductRepository;
 import com.vdc.ecommerce.service.ProductService;
@@ -29,28 +29,28 @@ public class ProductServiceImpl extends ProductService {
     }
 
     @Override
-    public JsonResponse<String> addProduct(ProductDTO productDTO) {
+    public ResponseModel<String> addProduct(ProductDTO productDTO) {
         Long branchId = productDTO.getBranch().getId();
 
         Optional<Branch> branch = branchRepository.findById(branchId);
         if (!branch.isPresent()) {
-            return JsonResponse.failure(ResponseMessage.NOT_FOUND.getMessage());
+            return ResponseModel.failure(ResponseMessage.NOT_FOUND.getMessage());
         }
         Product product = mapper.toEntity(productDTO);
         product.setBranch(branch.get());
         repo.save(product);
 
-        return JsonResponse.successful(ResponseMessage.SUCCESS.getMessage());
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage());
     }
 
     @Override
-    public JsonResponse<String> updateQuantity(Long productId, Long quantity) {
+    public ResponseModel<String> updateQuantity(Long productId, Long quantity) {
         if (productId == null) {
-            return JsonResponse.failure("Product can not null");
+            return ResponseModel.failure("Product can not null");
         }
         Optional<Product> productOptional = repo.findById(productId);
         if (!productOptional.isPresent()) {
-            return JsonResponse.failure(ResponseMessage.NOT_FOUND.getMessage());
+            return ResponseModel.failure(ResponseMessage.NOT_FOUND.getMessage());
         }
         Product product = productOptional.get();
         Quantity qtt;
@@ -65,7 +65,7 @@ public class ProductServiceImpl extends ProductService {
 
         product.setQuantity(qtt);
         repo.save(product);
-        return JsonResponse.successful(ResponseMessage.SUCCESS.getMessage());
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage());
     }
 
 }

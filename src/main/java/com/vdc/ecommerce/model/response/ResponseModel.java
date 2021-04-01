@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class JsonResponse<T> {
+public class ResponseModel<T> {
 
     private static class Meta {
         @JsonIgnore
@@ -37,42 +37,42 @@ public class JsonResponse<T> {
 
     private Meta meta;
     private T data;
-    private RestResponsePage<?> pagination;
+    private ResponsePageableModel<?> pagination;
 
     //prevent init this object
-    private JsonResponse() {
+    private ResponseModel() {
     }
 
-    public static <T> JsonResponse<List<T>> successful(String message, RestResponsePage<T> pagination) {
-        JsonResponse<List<T>> response = new JsonResponse<>();
+    public static <T> ResponseModel<List<T>> successful(String message, ResponsePageableModel<T> pagination) {
+        ResponseModel<List<T>> response = new ResponseModel<>();
         response.setMeta(new Meta(HttpStatus.OK.value(), message));
         response.setData(pagination.getContent());
         response.setPagination(pagination);
         return response;
     }
 
-    public static <T> JsonResponse<T> successful(String message, T data) {
-        JsonResponse<T> response = new JsonResponse<>();
+    public static <T> ResponseModel<T> successful(String message, T data) {
+        ResponseModel<T> response = new ResponseModel<>();
         response.setMeta(new Meta(HttpStatus.OK.value(), message));
         response.setData(data);
         return response;
     }
 
 
-    public static <T> JsonResponse<T> successful(String message) {
-        JsonResponse<T> response = new JsonResponse<>();
+    public static <T> ResponseModel<T> successful(String message) {
+        ResponseModel<T> response = new ResponseModel<>();
         response.setMeta(new Meta(HttpStatus.OK.value(), message));
         return response;
     }
 
-    public static <T> JsonResponse<T> failure(String message, int statusCode) {
-        JsonResponse<T> response = new JsonResponse<>();
+    public static <T> ResponseModel<T> failure(String message, int statusCode) {
+        ResponseModel<T> response = new ResponseModel<>();
         response.setMeta(new Meta(statusCode, message));
         return response;
     }
 
-    public static <T> JsonResponse<T> failure(String message) {
-        JsonResponse<T> response = new JsonResponse<>();
+    public static <T> ResponseModel<T> failure(String message) {
+        ResponseModel<T> response = new ResponseModel<>();
         response.setMeta(new Meta(HttpStatus.BAD_REQUEST.value(), message));
         return response;
     }
