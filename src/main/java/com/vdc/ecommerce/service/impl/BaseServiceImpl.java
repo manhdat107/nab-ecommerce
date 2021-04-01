@@ -1,71 +1,94 @@
 package com.vdc.ecommerce.service.impl;
 
+import com.vdc.ecommerce.common.PageConstant;
 import com.vdc.ecommerce.model.CommonEntity;
-import com.vdc.ecommerce.service.BaseService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.vdc.ecommerce.model.dto.BaseDTO;
+import com.vdc.ecommerce.model.mapper.BaseMapper;
+import com.vdc.ecommerce.model.response.JsonResponseEntity;
+import com.vdc.ecommerce.model.response.RestResponsePage;
+import com.vdc.ecommerce.service.IBaseService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+/**
+ * Base of ServiceCoreImpl to handle common http interactive
+ *
+ * @param <E>  Entity
+ * @param <D>  DTO
+ * @param <ID> ID Type
+ */
+public abstract class BaseServiceImpl<E extends CommonEntity<ID>, D extends BaseDTO<ID>, ID extends Long> implements IBaseService<D, ID> {
 
-public abstract class BaseServiceImpl<E extends CommonEntity, ID extends Number> implements BaseService<E, ID> {
+    JpaRepository<E, ID> repo;
+    BaseMapper<E, D> mapper;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseService.class);
-
-    private final JpaRepository<E, ID> repository;
-
-    public BaseServiceImpl(JpaRepository<E, ID> repository) {
-        this.repository = repository;
+    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper) {
+        this.repo = repo;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<E> addMultiple(List<E> entities, int batchSize) {
-        return null;
+    public JsonResponseEntity<List<D>> create(List<D> dList) {
+        List<E> eList = mapper.toEntities(dList);
+        repo.saveAll(eList);
+        return JsonResponseEntity.successful("Create entities successful");
     }
 
     @Override
-    public E add(E entity) {
-        repository.save(entity);
-        return entity;
+    public JsonResponseEntity<D> add(D DTO) {
+        E entity = mapper.toEntity(DTO);
+        repo.save(entity);
+        return JsonResponseEntity.successful("Add successful");
     }
 
     @Override
-    public E update(E entity) {
-        Optional<E> eOptional = repository.findById((ID) entity.getId());
-        if (eOptional.isPresent()) {
-            E eSave = eOptional.get();
-            repository.saveAndFlush(eSave);
-            return entity;
+    public JsonResponseEntity<D> update(D d) {
+        E e = mapper.toEntity(d);
+        Optional<E> temp = repo.findById(e.getId());
+        Optional<E> eOptional = repo.findById(e.getId());
+        if (!eOptional.isPresent()) {
+            return JsonResponseEntity.failure("Not find object with this id to update", 200);
         }
-        throw new NoSuchElementException("No value present");
+        E eSave = eOptional.get();
+        repo.saveAndFlush(eSave);
+        return JsonResponseEntity.successful("Update entities successful", d);
     }
 
     @Override
-    public List<E> getAll(Pageable pageable) {
-        if (pageable == null) {
-            //just get 10 first when default
-            pageable = PageRequest.of(0, 10);
+    public JsonResponseEntity<List<D>> getAll(Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? PageConstant.PAGE_NUM_DEFAULT.getNum() : pageNum;
+        pageSize = pageSize == null ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : pageSize;
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+
+        Page<E> ePage = repo.findAll(pageable);
+        Page<D> dPage = ePage.map(mapper::toDTO);
+        RestResponsePage<D> dRestResponsePage = new RestResponsePage<>(dPage.getContent(), dPage.getPageable(), dPage.getTotalElements());
+        return JsonResponseEntity.successful("Get all is success", dRestResponsePage);
+    }
+
+    @Override
+    public JsonResponseEntity<D> getById(ID id) {
+        Optional<E> eOptional = repo.findById(id);
+        if (!eOptional.isPresent()) {
+            return JsonResponseEntity.failure("Not find object with this id", 500);
         }
-        return repository.findAll(pageable).get().collect(Collectors.toList());
+        D d = mapper.toDTO(eOptional.get());
+        return JsonResponseEntity.successful("Find it successful", d);
     }
 
     @Override
-    public E getById(ID id) {
-        return null;
-    }
-
-    @Override
-    public void deleteById(ID id) {
-        if(id == null) {
-            LOGGER.info("id is empty");
-            return;
+    public JsonResponseEntity<String> deleteById(ID id) {
+        Optional<E> eOptional = repo.findById(id);
+        if (!eOptional.isPresent()) {
+            return JsonResponseEntity.failure("Not find object with this id", 500);
         }
-        repository.deleteById(id);
+        repo.deleteById(id);
+        return JsonResponseEntity.successful(String.format("Delete object successful with id %s", id));
     }
+
 }

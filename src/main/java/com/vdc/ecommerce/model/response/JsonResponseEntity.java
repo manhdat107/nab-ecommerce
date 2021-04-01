@@ -15,8 +15,8 @@ import java.util.List;
 
 @Component
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Setter
 @Getter
+@Setter
 @Slf4j
 public class JsonResponseEntity<T> {
 
@@ -37,13 +37,13 @@ public class JsonResponseEntity<T> {
 
     private Meta meta;
     private T data;
-    private ResponsePageable<?> pagination;
+    private RestResponsePage<?> pagination;
 
     //prevent init this object
     private JsonResponseEntity() {
     }
 
-    public static <T> JsonResponseEntity<List<T>> successful(String message, ResponsePageable<T> pagination) {
+    public static <T> JsonResponseEntity<List<T>> successful(String message, RestResponsePage<T> pagination) {
         JsonResponseEntity<List<T>> response = new JsonResponseEntity<>();
         response.setMeta(new Meta(HttpStatus.OK.value(), message));
         response.setData(pagination.getContent());
