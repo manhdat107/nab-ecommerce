@@ -1,7 +1,7 @@
 package com.vdc.ecommerce.model.security;
 
 import com.vdc.ecommerce.common.RoleConstant;
-import com.vdc.ecommerce.model.CommonEntity;
+import com.vdc.ecommerce.model.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "roles")
-public class Role extends CommonEntity<Long> implements GrantedAuthority {
+public class Role extends BaseEntity<Long> implements GrantedAuthority {
     @Enumerated(EnumType.STRING)
     @NaturalId
     @Column(length = 60)

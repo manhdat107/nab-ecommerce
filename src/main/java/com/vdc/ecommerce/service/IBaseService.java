@@ -1,7 +1,6 @@
 package com.vdc.ecommerce.service;
 
-import com.vdc.ecommerce.model.response.JsonResponseEntity;
-import org.springframework.data.domain.Pageable;
+import com.vdc.ecommerce.model.response.JsonResponse;
 
 import java.util.List;
 
@@ -13,10 +12,15 @@ import java.util.List;
  * @param <ID> DTO data's id type
  */
 public interface IBaseService<D, ID> {
-    JsonResponseEntity<List<D>> create(List<D> DTOs);
-    JsonResponseEntity<D> add(D DTO);
-    JsonResponseEntity<D> update(D DTO);
-    JsonResponseEntity<List<D>> getAll(Integer pageNum, Integer pageSize);
-    JsonResponseEntity<D> getById(ID id);
-    JsonResponseEntity<String> deleteById(ID id);
+    JsonResponse<List<D>> create(List<D> DTOs);
+
+    JsonResponse<D> add(D DTO);
+
+    JsonResponse<D> update(D DTO);
+
+    JsonResponse<List<D>> getAll(Integer pageNum, Integer pageSize);
+
+    JsonResponse<D> getById(ID id);
+
+    JsonResponse<String> deleteById(ID id);
 }

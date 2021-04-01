@@ -2,13 +2,13 @@ package com.vdc.ecommerce.controller;
 
 import com.vdc.ecommerce.common.ApiConstant;
 import com.vdc.ecommerce.model.dto.ProductDTO;
-import com.vdc.ecommerce.model.response.JsonResponseEntity;
+import com.vdc.ecommerce.model.response.JsonResponse;
 import com.vdc.ecommerce.service.ProductService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(ApiConstant.ADMIN)
+@RequestMapping(ApiConstant.PRODUCT)
 @Api(tags = "Product Management")
 public class ProductController {
 
@@ -19,13 +19,23 @@ public class ProductController {
     }
 
     @GetMapping(ApiConstant.LIST)
-    public JsonResponseEntity<?> getAllProduct(@RequestParam("pageNumber") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
+    public JsonResponse<?> getAllProduct(@RequestParam("pageNumber") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
         return productService.getAll(pageNum, pageSize);
     }
 
     @PostMapping(ApiConstant.ADD)
-    public JsonResponseEntity<ProductDTO> addNewProduct(@RequestBody ProductDTO productDTO) {
-        return productService.add(productDTO);
+    public JsonResponse<?> addNewProduct(@RequestBody ProductDTO productDTO) {
+        return productService.addProduct(productDTO);
+    }
+
+    @PutMapping(ApiConstant.UPDATE)
+    public JsonResponse<?> updateProduct(@RequestBody ProductDTO productDTO) {
+        return productService.update(productDTO);
+    }
+
+    @DeleteMapping(ApiConstant.DELETE)
+    public JsonResponse<?> deleteProduct(@RequestParam("id") Long productId) {
+        return productService.deleteById(productId);
     }
 
 

@@ -16,12 +16,12 @@ import java.util.Date;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(
-        value = {"id", "createDay", "lastUpdate"},
+        value = { "createDay", "lastUpdate"},
         allowGetters = true
 )
 @Getter
 @Setter
-public abstract class CommonEntity<ID extends Number> implements Serializable {
+public abstract class BaseEntity<ID extends Number> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private ID id;

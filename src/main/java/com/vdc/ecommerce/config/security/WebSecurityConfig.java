@@ -38,7 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     };
     private static final String[] ADMIN_ROLE_PATTERN = {
             "/api/admin/**",
-            "/api/admin/**"
+            "/api/admin/**",
+            "/product/**"
     };
 
     @Bean

@@ -5,7 +5,7 @@ import com.vdc.ecommerce.common.RoleConstant;
 import com.vdc.ecommerce.config.security.JwtProvider;
 import com.vdc.ecommerce.model.dto.SignInRequest;
 import com.vdc.ecommerce.model.dto.SignUpRequest;
-import com.vdc.ecommerce.model.response.JsonResponseEntity;
+import com.vdc.ecommerce.model.response.JsonResponse;
 import com.vdc.ecommerce.model.security.JwtResponse;
 import com.vdc.ecommerce.model.security.Role;
 import com.vdc.ecommerce.model.security.User;
@@ -49,10 +49,10 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public JsonResponseEntity<JwtResponse> signIn(SignInRequest signInRequest) {
+    public JsonResponse<JwtResponse> signIn(SignInRequest signInRequest) {
         User user = userRepository.findByUsername(signInRequest.getUsername()).orElse(null);
         if (user == null) {
-            return JsonResponseEntity.failure("User Not Found");
+            return JsonResponse.failure("User Not Found");
         }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -62,19 +62,19 @@ public class AccountServiceImpl implements IAccountService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateJwtToken(authentication);
-        return JsonResponseEntity.successful(HttpStatus.OK.toString(), new JwtResponse(user.getId(), jwt));
+        return JsonResponse.successful(HttpStatus.OK.toString(), new JwtResponse(user.getId(), jwt));
     }
 
     @Override
-    public JsonResponseEntity<?> signUp(SignUpRequest signUpRequest) {
+    public JsonResponse<?> signUp(SignUpRequest signUpRequest) {
         if (!signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword())) {
-            return JsonResponseEntity.failure("Those passwords did not match.");
+            return JsonResponse.failure("Those passwords did not match.");
         }
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return JsonResponseEntity.failure("Username is already exists, Please try again");
+            return JsonResponse.failure("Username is already exists, Please try again");
         }
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return JsonResponseEntity.failure("Email is already exists, Please try again");
+            return JsonResponse.failure("Email is already exists, Please try again");
         }
 
         User user = new User(
@@ -106,7 +106,7 @@ public class AccountServiceImpl implements IAccountService {
         user.setRoles(roles);
         validatorUser(user);
         userRepository.save(user);
-        return JsonResponseEntity.successful(HttpStatus.OK.toString());
+        return JsonResponse.successful(HttpStatus.OK.toString());
     }
 
     public void validatorUser(User user) {

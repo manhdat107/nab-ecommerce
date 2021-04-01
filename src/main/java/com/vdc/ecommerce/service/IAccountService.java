@@ -2,12 +2,12 @@ package com.vdc.ecommerce.service;
 
 import com.vdc.ecommerce.model.dto.SignInRequest;
 import com.vdc.ecommerce.model.dto.SignUpRequest;
-import com.vdc.ecommerce.model.response.JsonResponseEntity;
+import com.vdc.ecommerce.model.response.JsonResponse;
 
 public interface IAccountService {
 
-    JsonResponseEntity<?> signIn(SignInRequest signInRequest);
+    JsonResponse<?> signIn(SignInRequest signInRequest);
 
-    JsonResponseEntity<?> signUp(SignUpRequest signUpRequest);
+    JsonResponse<?> signUp(SignUpRequest signUpRequest);
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Branch extends CommonEntity<Long> {
+public class Branch extends BaseEntity<Long> {
 
     private String name;
     

@@ -1,6 +1,6 @@
 package com.vdc.ecommerce.model.security;
 
-import com.vdc.ecommerce.model.CommonEntity;
+import com.vdc.ecommerce.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +15,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-public class User extends CommonEntity<Long> {
+public class User extends BaseEntity<Long> {
     @NotEmpty(message = "username may be not empty.")
     @NotBlank(message = "username may be not blank.")
     @Size(min = 4, message = "must be at least 4 characters")

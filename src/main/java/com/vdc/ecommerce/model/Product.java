@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-public class Product extends CommonEntity<Long> {
+public class Product extends BaseEntity<Long> {
 
     private String name;
 
@@ -20,6 +20,7 @@ public class Product extends CommonEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "branch_id", nullable = false)
-    @Enumerated(EnumType.STRING)
     private Branch branch;
+
+    private Long stock;
 }

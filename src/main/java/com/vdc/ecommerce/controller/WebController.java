@@ -3,7 +3,7 @@ package com.vdc.ecommerce.controller;
 import com.vdc.ecommerce.common.ApiConstant;
 import com.vdc.ecommerce.model.dto.SignInRequest;
 import com.vdc.ecommerce.model.dto.SignUpRequest;
-import com.vdc.ecommerce.model.response.JsonResponseEntity;
+import com.vdc.ecommerce.model.response.JsonResponse;
 import com.vdc.ecommerce.service.IAccountService;
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +22,12 @@ public class WebController {
     }
 
     @PostMapping(ApiConstant.SIGN_IN)
-    public JsonResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest) {
+    public JsonResponse<?> signIn(@RequestBody SignInRequest signInRequest) {
         return accountService.signIn(signInRequest);
     }
 
     @PostMapping(ApiConstant.SIGN_UP)
-    public JsonResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
+    public JsonResponse<?> signUp(@RequestBody SignUpRequest signUpRequest) {
         return accountService.signUp(signUpRequest);
     }
 }

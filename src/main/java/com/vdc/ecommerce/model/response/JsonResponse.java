@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Slf4j
-public class JsonResponseEntity<T> {
+public class JsonResponse<T> {
 
     private static class Meta {
         @JsonIgnore
@@ -40,39 +40,39 @@ public class JsonResponseEntity<T> {
     private RestResponsePage<?> pagination;
 
     //prevent init this object
-    private JsonResponseEntity() {
+    private JsonResponse() {
     }
 
-    public static <T> JsonResponseEntity<List<T>> successful(String message, RestResponsePage<T> pagination) {
-        JsonResponseEntity<List<T>> response = new JsonResponseEntity<>();
+    public static <T> JsonResponse<List<T>> successful(String message, RestResponsePage<T> pagination) {
+        JsonResponse<List<T>> response = new JsonResponse<>();
         response.setMeta(new Meta(HttpStatus.OK.value(), message));
         response.setData(pagination.getContent());
         response.setPagination(pagination);
         return response;
     }
 
-    public static <T> JsonResponseEntity<T> successful(String message, T data) {
-        JsonResponseEntity<T> response = new JsonResponseEntity<>();
+    public static <T> JsonResponse<T> successful(String message, T data) {
+        JsonResponse<T> response = new JsonResponse<>();
         response.setMeta(new Meta(HttpStatus.OK.value(), message));
         response.setData(data);
         return response;
     }
 
 
-    public static <T> JsonResponseEntity<T> successful(String message) {
-        JsonResponseEntity<T> response = new JsonResponseEntity<>();
+    public static <T> JsonResponse<T> successful(String message) {
+        JsonResponse<T> response = new JsonResponse<>();
         response.setMeta(new Meta(HttpStatus.OK.value(), message));
         return response;
     }
 
-    public static <T> JsonResponseEntity<T> failure(String message, int statusCode) {
-        JsonResponseEntity<T> response = new JsonResponseEntity<>();
+    public static <T> JsonResponse<T> failure(String message, int statusCode) {
+        JsonResponse<T> response = new JsonResponse<>();
         response.setMeta(new Meta(statusCode, message));
         return response;
     }
 
-    public static <T> JsonResponseEntity<T> failure(String message) {
-        JsonResponseEntity<T> response = new JsonResponseEntity<>();
+    public static <T> JsonResponse<T> failure(String message) {
+        JsonResponse<T> response = new JsonResponse<>();
         response.setMeta(new Meta(HttpStatus.BAD_REQUEST.value(), message));
         return response;
     }
