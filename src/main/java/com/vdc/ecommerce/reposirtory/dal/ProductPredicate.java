@@ -1,5 +1,6 @@
 package com.vdc.ecommerce.reposirtory.dal;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -21,28 +22,27 @@ public class ProductPredicate {
         if (!CollectionUtils.isEmpty(metricSearch.getMetricFilters())) {
             for (MetricSearch.MetricFilter o : metricSearch.getMetricFilters()) {
                 if ("name".equals(o.getField())) {
-                    bExpression.and(Q_PRODUCT.name.like(o.getValue()));
+                    bExpression = bExpression.and(Q_PRODUCT.name.like("%" + o.getValue() + "%"));
                 }
                 if ("color".equals(o.getField())) {
-                    bExpression.and(Q_PRODUCT.name.like(o.getValue()));
+                    bExpression = bExpression.and(Q_PRODUCT.name.like("%" + o.getValue() + "%"));
                 }
                 if ("price".equals(o.getField())) {
                     BigDecimal price = o.getValue() == null || o.getValue().isEmpty() ? BigDecimal.ZERO : new BigDecimal(o.getValue());
-                    if (">".equals(o.getCondition())) {
-                        bExpression.and(Q_PRODUCT.price.goe(price));
-                    } else if ("<".equals(o.getCondition())) {
-                        bExpression.and(Q_PRODUCT.price.loe(price));
+                    if (o.getCondition().contains(">")) {
+                        bExpression = bExpression.and(Q_PRODUCT.price.goe(price));
+                    } else if (o.getCondition().contains("<")) {
+                        bExpression = bExpression.and(Q_PRODUCT.price.loe(price));
                     } else {
-                        bExpression.and(Q_PRODUCT.price.eq(price));
+                        bExpression = bExpression.and(Q_PRODUCT.price.eq(price));
                     }
                 }
-                if("branch".equals(o.getField())) {
-                    bExpression.and(Q_PRODUCT.branch.name.like(o.getValue()));
+                if ("branch".equals(o.getField())) {
+                    bExpression = bExpression.and(Q_PRODUCT.branch.name.like("%" + o.getValue() + "%"));
                 }
             }
         }
         return bExpression;
     }
-
 
 }

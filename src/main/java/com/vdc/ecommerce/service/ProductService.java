@@ -8,12 +8,13 @@ import com.vdc.ecommerce.model.mapper.ProductMapper;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.reposirtory.ProductRepository;
 import com.vdc.ecommerce.service.impl.BaseServiceImpl;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 
 public abstract class ProductService extends BaseServiceImpl<Product, ProductDTO, Long> {
 
-    public ProductService(ProductRepository repository, ProductMapper productMapper, ProductRepository queryDsl, AppUtils appUtils) {
+    public ProductService(ProductRepository repository, ProductMapper productMapper, QuerydslPredicateExecutor<Product> queryDsl, AppUtils appUtils) {
         super(repository, productMapper, queryDsl, appUtils);
     }
 

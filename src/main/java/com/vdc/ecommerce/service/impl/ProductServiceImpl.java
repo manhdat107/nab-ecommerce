@@ -11,6 +11,7 @@ import com.vdc.ecommerce.model.Quantity;
 import com.vdc.ecommerce.model.dto.ProductDTO;
 import com.vdc.ecommerce.model.mapper.ProductMapper;
 import com.vdc.ecommerce.model.response.ResponseModel;
+import com.vdc.ecommerce.model.response.ResponsePageableModel;
 import com.vdc.ecommerce.reposirtory.BranchRepository;
 import com.vdc.ecommerce.reposirtory.ProductRepository;
 import com.vdc.ecommerce.reposirtory.dal.ProductPredicate;
@@ -19,6 +20,7 @@ import com.vdc.ecommerce.service.QuantityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class ProductServiceImpl extends ProductService {
     private final QuantityService quantityService;
     private final ProductPredicate productPredicate;
 
-    public ProductServiceImpl(ProductRepository repository, ProductMapper productMapper, ProductRepository queryDsl,
+    public ProductServiceImpl(ProductRepository repository, ProductMapper productMapper, QuerydslPredicateExecutor<Product> queryDsl,
                               AppUtils appUtils, BranchRepository branchRepository, QuantityService quantityService,
                               ProductPredicate productPredicate) {
         super(repository, productMapper, queryDsl, appUtils);
@@ -83,23 +85,25 @@ public class ProductServiceImpl extends ProductService {
     @Override
     public ResponseModel<List<ProductDTO>> findByPredicate(MetricSearch metricSearch) {
         Pageable pageable;
-        int pageNum = (metricSearch == null || metricSearch.getPage() == null) ? PageConstant.PAGE_DEFAULT.getNum() : metricSearch.getPage();
-        int pageSize = (metricSearch == null || metricSearch.getPageSize() == null) ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : metricSearch.getPageSize();
+        int pageNum = (metricSearch == null || metricSearch.getPage() == 0) ? PageConstant.PAGE_DEFAULT.getNum() : metricSearch.getPage();
+        int pageSize = (metricSearch == null || metricSearch.getPageSize() == 0) ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : metricSearch.getPageSize();
 
         if (metricSearch == null) {
             return getAll(pageNum, pageSize, null, false);
-        } else  {
+        } else {
 
-            if(metricSearch.getField() == null || metricSearch.getField().isEmpty()) {
+            if (metricSearch.getField() == null || metricSearch.getField().isEmpty()) {
                 pageable = PageRequest.of(pageNum, pageSize);
             } else {
                 pageable = appUtils.getPageable(pageNum, pageSize, metricSearch.getField(), metricSearch.isDest());
             }
 
             Predicate predicate = productPredicate.findByMetricFilter(metricSearch);
-            Page<?> products = queryDsl.findAll(predicate, pageable);
+            Page<Product> pProduct = queryDsl.findAll(predicate, pageable);
 
-            return null;
+            List<ProductDTO> productDTOS = mapper.toDTOs(pProduct.getContent());
+            ResponsePageableModel<ProductDTO> dResponsePageableModel = new ResponsePageableModel<ProductDTO>(productDTOS, pProduct.getPageable(), pProduct.getTotalElements());
+            return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), dResponsePageableModel);
         }
     }
 

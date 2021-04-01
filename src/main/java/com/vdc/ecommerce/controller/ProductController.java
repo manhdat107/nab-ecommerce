@@ -19,7 +19,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping(ApiConstant.LIST)
+    @PostMapping(ApiConstant.LIST)
     public ResponseModel<?> getAllProduct(@RequestBody MetricSearch metricSearch) {
         return productService.findByPredicate(metricSearch);
     }
