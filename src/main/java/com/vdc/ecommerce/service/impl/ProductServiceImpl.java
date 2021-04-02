@@ -12,7 +12,7 @@ import com.vdc.ecommerce.model.dto.ProductDTO;
 import com.vdc.ecommerce.model.dto.QuantityDTO;
 import com.vdc.ecommerce.model.mapper.ProductMapper;
 import com.vdc.ecommerce.model.mapper.QuantityMapper;
-import com.vdc.ecommerce.model.predicate.ProductPredicate;
+import com.vdc.ecommerce.model.predicate.ProductPredicateService;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.model.response.ResponsePageableModel;
 import com.vdc.ecommerce.reposirtory.BranchRepository;
@@ -34,17 +34,17 @@ public class ProductServiceImpl extends ProductService {
 
     private final BranchRepository branchRepository;
     private final QuantityService quantityService;
-    private final ProductPredicate productPredicate;
+    private final ProductPredicateService productPredicateService;
     private final ProductRepository productRepository;
     private final QuantityMapper quantityMapper;
 
     public ProductServiceImpl(ProductRepository repository, ProductMapper productMapper, AppUtils appUtils,
                               BranchRepository branchRepository, QuantityService quantityService,
-                              ProductPredicate productPredicate, QuantityMapper quantityMapper) {
+                              ProductPredicateService productPredicateService, QuantityMapper quantityMapper) {
         super(repository, productMapper, appUtils);
         this.branchRepository = branchRepository;
         this.quantityService = quantityService;
-        this.productPredicate = productPredicate;
+        this.productPredicateService = productPredicateService;
         this.productRepository = repository;
         this.quantityMapper = quantityMapper;
     }
@@ -115,7 +115,7 @@ public class ProductServiceImpl extends ProductService {
                 pageable = appUtils.getPageable(pageNum, pageSize, metricSearch.getField(), metricSearch.isDest());
             }
 
-            Predicate predicate = productPredicate.findByMetricFilter(metricSearch);
+            Predicate predicate = productPredicateService.findByMetricFilter(metricSearch);
             Page<Product> pProduct = productRepository.findAll(predicate, pageable);
 
             List<ProductDTO> productDTOS = mapper.toDTOs(pProduct.getContent());
@@ -130,7 +130,7 @@ public class ProductServiceImpl extends ProductService {
         if (ids.isEmpty()) {
             return new ArrayList<>();
         }
-        Predicate predicate = productPredicate.findByProductIdIn(ids);
+        Predicate predicate = productPredicateService.findByProductIdIn(ids);
         return (List<Product>) productRepository.findAll(predicate);
     }
 
