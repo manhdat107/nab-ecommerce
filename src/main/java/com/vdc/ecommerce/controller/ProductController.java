@@ -1,7 +1,6 @@
 package com.vdc.ecommerce.controller;
 
 import com.vdc.ecommerce.common.ApiConstant;
-import com.vdc.ecommerce.model.MetricSearch;
 import com.vdc.ecommerce.model.dto.ProductDTO;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.service.ProductService;
@@ -17,11 +16,6 @@ public class ProductController {
 
     public ProductController(ProductService productService) {
         this.productService = productService;
-    }
-
-    @PostMapping(ApiConstant.LIST)
-    public ResponseModel<?> getAllProduct(@RequestBody MetricSearch metricSearch) {
-        return productService.findByPredicate(metricSearch);
     }
 
     @PostMapping(ApiConstant.ADD)

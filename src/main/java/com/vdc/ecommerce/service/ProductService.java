@@ -8,14 +8,13 @@ import com.vdc.ecommerce.model.mapper.ProductMapper;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.reposirtory.ProductRepository;
 import com.vdc.ecommerce.service.impl.BaseServiceImpl;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 
 public abstract class ProductService extends BaseServiceImpl<Product, ProductDTO, Long> {
 
-    public ProductService(ProductRepository repository, ProductMapper productMapper, QuerydslPredicateExecutor<Product> queryDsl, AppUtils appUtils) {
-        super(repository, productMapper, queryDsl, appUtils);
+    public ProductService(ProductRepository repository, ProductMapper productMapper, AppUtils appUtils) {
+        super(repository, productMapper, appUtils);
     }
 
     public abstract ResponseModel<String> addProduct(ProductDTO productDTO);
@@ -24,4 +23,8 @@ public abstract class ProductService extends BaseServiceImpl<Product, ProductDTO
     public abstract ResponseModel<String> updateQuantity(Long productId, Long quantity);
 
     public abstract ResponseModel<List<ProductDTO>> findByPredicate(MetricSearch metricSearch);
+
+    public abstract List<Product> findByIdIn(List<Long> ids);
+
+    public abstract void updateList(List<Product> products);
 }

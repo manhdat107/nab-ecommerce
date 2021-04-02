@@ -9,12 +9,10 @@ import com.vdc.ecommerce.model.mapper.BaseMapper;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.model.response.ResponsePageableModel;
 import com.vdc.ecommerce.service.IBaseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,13 +27,11 @@ import java.util.Optional;
 public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDTO<ID>, ID extends Long> implements IBaseService<D, ID> {
 
     protected JpaRepository<E, ID> repo;
-    protected QuerydslPredicateExecutor<E> queryDsl;
     protected BaseMapper<E, D> mapper;
     protected AppUtils appUtils;
 
-    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper, QuerydslPredicateExecutor<E> queryDsl, AppUtils appUtils) {
+    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper, AppUtils appUtils) {
         this.repo = repo;
-        this.queryDsl = queryDsl;
         this.mapper = mapper;
         this.appUtils = appUtils;
     }
@@ -44,34 +40,33 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDT
     public ResponseModel<List<D>> create(List<D> dList) {
         List<E> eList = mapper.toEntities(dList);
         repo.saveAll(eList);
-        return ResponseModel.successful("Create entities successful");
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage());
     }
 
     @Override
     public ResponseModel<D> add(D DTO) {
         E entity = mapper.toEntity(DTO);
         repo.save(entity);
-        return ResponseModel.successful("Add successful");
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage());
     }
 
     @Override
     public ResponseModel<D> update(D d) {
         E e = mapper.toEntity(d);
-        Optional<E> temp = repo.findById(e.getId());
         Optional<E> eOptional = repo.findById(e.getId());
         if (!eOptional.isPresent()) {
-            return ResponseModel.failure("Not find object with this id to update", 200);
+            return ResponseModel.failure(ResponseMessage.NOT_FOUND.getMessage(), 204);
         }
         E eSave = eOptional.get();
         repo.saveAndFlush(eSave);
-        return ResponseModel.successful("Update entities successful", d);
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), d);
     }
 
     @Override
     public ResponseModel<List<D>> getAll(Integer pageNum, Integer pageSize, String field, boolean isDesc) {
         Pageable pageable;
 
-        if(field == null || field.isEmpty()) {
+        if (field == null || field.isEmpty()) {
             pageable = PageRequest.of(pageNum == null ? PageConstant.PAGE_DEFAULT.getNum() : pageNum,
                     pageSize == null ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : pageSize);
         } else {

@@ -20,18 +20,27 @@ import java.util.List;
 @Slf4j
 public class ResponseModel<T> {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private static class Meta {
         @JsonIgnore
         private final SimpleDateFormat format;
         public String serverDateTime;
         public int statusCode;
         public String message;
+        public List<String> messages;
 
         Meta(int statusCode, String message) {
             format = new SimpleDateFormat(DateConstant.DATE_TIME.getType());
             serverDateTime = format.format(new Date());
             this.statusCode = statusCode;
             this.message = message;
+        }
+
+        Meta(int statusCode, List<String> messages) {
+            format = new SimpleDateFormat(DateConstant.DATE_TIME.getType());
+            serverDateTime = format.format(new Date());
+            this.statusCode = statusCode;
+            this.messages = messages;
         }
     }
 
@@ -74,6 +83,12 @@ public class ResponseModel<T> {
     public static <T> ResponseModel<T> failure(String message) {
         ResponseModel<T> response = new ResponseModel<>();
         response.setMeta(new Meta(HttpStatus.BAD_REQUEST.value(), message));
+        return response;
+    }
+
+    public static <T> ResponseModel<T> failure(List<String> messages) {
+        ResponseModel<T> response = new ResponseModel<>();
+        response.setMeta(new Meta(HttpStatus.BAD_REQUEST.value(), messages));
         return response;
     }
 }

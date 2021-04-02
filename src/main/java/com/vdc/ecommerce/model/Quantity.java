@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Setter
 public class Quantity extends BaseEntity<Long> {
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(columnDefinition = "BIGINT(20) default 0")

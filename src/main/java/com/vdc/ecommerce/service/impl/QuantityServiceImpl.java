@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuantityServiceImpl extends QuantityService {
 
-    public QuantityServiceImpl(QuantityRepository repo, QuantityMapper mapper, QuantityRepository queryDsl, AppUtils appUtils) {
-        super(repo, mapper, queryDsl, appUtils);
+    private final QuantityRepository quantityRepository;
+
+    public QuantityServiceImpl(QuantityRepository repo, QuantityMapper mapper, AppUtils appUtils) {
+        super(repo, mapper, appUtils);
+        this.quantityRepository = repo;
     }
 
     @Override
@@ -19,6 +22,6 @@ public class QuantityServiceImpl extends QuantityService {
         if (quantity == null) {
             return;
         }
-        repo.save(quantity);
+        quantityRepository.save(quantity);
     }
 }

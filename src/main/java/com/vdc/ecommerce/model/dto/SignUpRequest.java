@@ -38,7 +38,7 @@ public class SignUpRequest {
 
     private String address;
 
-    private int phoneNumber;
+    private Long phoneNumber;
 
 }
 

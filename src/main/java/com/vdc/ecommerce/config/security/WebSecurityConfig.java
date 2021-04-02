@@ -30,7 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] IGNORE_PATTERN = {
             "/account/**",
-            "/home/**"
+            "/home/**",
+            "/product/*"
     };
 
     private static final String[] USER_ROLE_PATTERN = {

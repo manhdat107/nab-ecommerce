@@ -13,7 +13,8 @@ public enum ResponseMessage {
     AUTH_ROLE_NOT_FIND(500, "Fail! -> Cause: User Role not find"),
     AUTH_WRONG_INFORMATION(500, "Wrong username or password"),
     SUCCESS(200, "Success"),
-    NOT_FOUND(204, "Not Found");
+    NOT_FOUND(204, "Not Found"),
+    ERROR_SYSTEM(500, "Error while processing");
 
     public final int statusCode;
     public final String message;

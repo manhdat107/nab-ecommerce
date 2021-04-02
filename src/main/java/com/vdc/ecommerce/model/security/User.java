@@ -27,7 +27,7 @@ public class User extends BaseEntity<Long> {
     private String password;
     @Email(message = "Email Invalid, please try again.")
     private String email;
-    private int phoneNumber;
+    private Long phoneNumber;
     private String fullName;
     private String address;
 
@@ -41,7 +41,7 @@ public class User extends BaseEntity<Long> {
     }
 
     public User(String username, String password, @Email(message = "Email Invalid, please try again.") String email,
-                int phoneNumber, String fullName, String address) {
+                Long phoneNumber, String fullName, String address) {
         this.username = username;
         this.password = password;
         this.email = email;
