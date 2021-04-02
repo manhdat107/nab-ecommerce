@@ -19,7 +19,6 @@ public abstract class ProductService extends BaseServiceImpl<Product, ProductDTO
 
     public abstract ResponseModel<String> addProduct(ProductDTO productDTO);
 
-
     public abstract ResponseModel<String> updateQuantity(Long productId, Long quantity);
 
     public abstract ResponseModel<List<ProductDTO>> findByPredicate(MetricSearch metricSearch);
