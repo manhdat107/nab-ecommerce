@@ -1,8 +1,8 @@
 package com.vdc.ecommerce.controller;
 
 import com.vdc.ecommerce.common.ApiConstant;
-import com.vdc.ecommerce.model.dto.SignInRequest;
-import com.vdc.ecommerce.model.dto.SignUpRequest;
+import com.vdc.ecommerce.model.request.SignInRequest;
+import com.vdc.ecommerce.model.request.SignUpRequest;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.service.IAccountService;
 import io.swagger.annotations.Api;

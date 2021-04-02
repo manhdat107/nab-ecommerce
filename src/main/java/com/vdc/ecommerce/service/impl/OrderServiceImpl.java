@@ -10,7 +10,6 @@ import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.reposirtory.OrderRepository;
 import com.vdc.ecommerce.service.OrderService;
 import com.vdc.ecommerce.service.ProductService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -52,7 +51,7 @@ public class OrderServiceImpl extends OrderService {
             return ResponseModel.failure("Please select product");
         }
 
-        List<Product> products = productService.findByIdIn(productsId);
+        List<Product> products = productService.findByIds(productsId);
         List<Long> productOutOfStock = checkProductStock(products, productOrders);
 
         if (!productOutOfStock.isEmpty()) {

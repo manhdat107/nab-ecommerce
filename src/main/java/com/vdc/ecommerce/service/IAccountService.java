@@ -1,7 +1,7 @@
 package com.vdc.ecommerce.service;
 
-import com.vdc.ecommerce.model.dto.SignInRequest;
-import com.vdc.ecommerce.model.dto.SignUpRequest;
+import com.vdc.ecommerce.model.request.SignInRequest;
+import com.vdc.ecommerce.model.request.SignUpRequest;
 import com.vdc.ecommerce.model.response.ResponseModel;
 
 public interface IAccountService {

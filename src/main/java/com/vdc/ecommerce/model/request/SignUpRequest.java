@@ -1,4 +1,4 @@
-package com.vdc.ecommerce.model.dto;
+package com.vdc.ecommerce.model.request;
 
 import lombok.Getter;
 import lombok.Setter;

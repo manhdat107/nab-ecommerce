@@ -24,7 +24,7 @@ public abstract class ProductService extends BaseServiceImpl<Product, ProductDTO
 
     public abstract ResponseModel<List<ProductDTO>> findByPredicate(MetricSearch metricSearch);
 
-    public abstract List<Product> findByIdIn(List<Long> ids);
+    public abstract List<Product> findByIds(List<Long> ids);
 
     public abstract void updateList(List<Product> products);
 }

@@ -125,7 +125,7 @@ public class ProductServiceImpl extends ProductService {
     }
 
     @Override
-    public List<Product> findByIdIn(List<Long> ids) {
+    public List<Product> findByIds(List<Long> ids) {
 
         if (ids.isEmpty()) {
             return new ArrayList<>();
