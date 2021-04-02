@@ -15,7 +15,7 @@ public enum Color {
 
     public static Color lookup(String abbr) {
         for (Color v : values()) {
-            if (v.value.equals(abbr)) {
+            if (v.value.equals(abbr.toLowerCase())) {
                 return v;
             }
         }

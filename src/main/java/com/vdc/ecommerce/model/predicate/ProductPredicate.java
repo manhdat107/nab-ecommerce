@@ -18,6 +18,9 @@ public class ProductPredicate {
     }
 
     public static BooleanExpression andColorEqual(BooleanExpression predicate, Color value) {
+        if(value == null) {
+            return predicate;
+        }
         return predicate.and(Q_PRODUCT.color.eq(value));
     }
 
