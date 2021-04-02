@@ -1,5 +1,7 @@
 package com.vdc.ecommerce.service;
 
+import com.querydsl.core.types.Predicate;
+import com.vdc.ecommerce.model.MetricSearch;
 import com.vdc.ecommerce.model.response.ResponseModel;
 
 import java.util.List;
@@ -23,5 +25,7 @@ public interface IBaseService<D, ID> {
     ResponseModel<D> getById(ID id);
 
     ResponseModel<String> deleteById(ID id);
+
+    ResponseModel<List<D>> findByPredicate(MetricSearch metricSearch, Predicate predicate);
 
 }

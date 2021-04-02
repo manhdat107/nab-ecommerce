@@ -1,9 +1,11 @@
 package com.vdc.ecommerce.service.impl;
 
+import com.querydsl.core.types.Predicate;
 import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.common.PageConstant;
 import com.vdc.ecommerce.common.ResponseMessage;
 import com.vdc.ecommerce.model.BaseEntity;
+import com.vdc.ecommerce.model.MetricSearch;
 import com.vdc.ecommerce.model.dto.BaseDTO;
 import com.vdc.ecommerce.model.mapper.BaseMapper;
 import com.vdc.ecommerce.model.response.ResponseModel;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,13 +30,15 @@ import java.util.Optional;
 public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDTO<ID>, ID extends Long> implements IBaseService<D, ID> {
 
     protected JpaRepository<E, ID> repo;
+    protected QuerydslPredicateExecutor<E> queryDsl;
     protected BaseMapper<E, D> mapper;
     protected AppUtils appUtils;
 
-    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper, AppUtils appUtils) {
+    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper, AppUtils appUtils, QuerydslPredicateExecutor<E> queryDsl) {
         this.repo = repo;
         this.mapper = mapper;
         this.appUtils = appUtils;
+        this.queryDsl = queryDsl;
     }
 
     @Override
@@ -99,4 +104,28 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDT
         return ResponseModel.successful(String.format(ResponseMessage.SUCCESS.getMessage(), id));
     }
 
+    @Override
+    public ResponseModel<List<D>> findByPredicate(MetricSearch metricSearch, Predicate predicate) {
+        Pageable pageable;
+        int pageNum = (metricSearch == null || metricSearch.getPage() == null) ? PageConstant.PAGE_DEFAULT.getNum() : metricSearch.getPage();
+        int pageSize = (metricSearch == null || metricSearch.getPageSize() == null || metricSearch.getPageSize() == 0)
+                ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : metricSearch.getPageSize();
+
+        if (metricSearch == null) {
+            return getAll(pageNum, pageSize, null, false);
+        } else {
+
+            if (metricSearch.getField() == null || metricSearch.getField().isEmpty()) {
+                pageable = PageRequest.of(pageNum, pageSize);
+            } else {
+                pageable = appUtils.getPageable(pageNum, pageSize, metricSearch.getField(), metricSearch.isDest());
+            }
+
+            Page<E> pProduct = queryDsl.findAll(predicate, pageable);
+
+            List<D> productDTOS = mapper.toDTOs(pProduct.getContent());
+            ResponsePageableModel<D> dResponsePageableModel = new ResponsePageableModel<D>(productDTOS, pProduct.getPageable(), pProduct.getTotalElements());
+            return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), dResponsePageableModel);
+        }
+    }
 }

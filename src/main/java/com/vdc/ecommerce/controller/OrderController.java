@@ -1,7 +1,9 @@
 package com.vdc.ecommerce.controller;
 
+import com.querydsl.core.types.Predicate;
 import com.vdc.ecommerce.common.ApiConstant;
 import com.vdc.ecommerce.model.MetricSearch;
+import com.vdc.ecommerce.model.predicate.OrderPredicate;
 import com.vdc.ecommerce.model.request.OrderRequest;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.service.OrderService;
@@ -16,9 +18,11 @@ import javax.validation.Valid;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderPredicate orderPredicate;
 
-    public OrderController(OrderService orderService){
+    public OrderController(OrderService orderService, OrderPredicate orderPredicate){
         this.orderService = orderService;
+        this.orderPredicate = orderPredicate;
     }
 
     @PostMapping(ApiConstant.ADD)
@@ -27,7 +31,8 @@ public class OrderController {
     }
 
     @PostMapping(ApiConstant.LIST)
-    public ResponseModel<?> getListOrder(@RequestBody(required = false) MetricSearch orderRequest) {
-        return null;
+    public ResponseModel<?> getListOrder(@RequestBody(required = false) MetricSearch metricSearch) {
+        Predicate predicate = orderPredicate.findByMetricFilter(metricSearch);
+        return orderService.findByPredicate(metricSearch, predicate);
     }
 }

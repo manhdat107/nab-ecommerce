@@ -5,6 +5,7 @@ import com.vdc.ecommerce.model.Quantity;
 import com.vdc.ecommerce.model.mapper.QuantityMapper;
 import com.vdc.ecommerce.reposirtory.QuantityRepository;
 import com.vdc.ecommerce.service.QuantityService;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,8 +13,8 @@ public class QuantityServiceImpl extends QuantityService {
 
     private final QuantityRepository quantityRepository;
 
-    public QuantityServiceImpl(QuantityRepository repo, QuantityMapper mapper, AppUtils appUtils) {
-        super(repo, mapper, appUtils);
+    public QuantityServiceImpl(QuantityRepository repo, QuantityMapper mapper, AppUtils appUtils, QuerydslPredicateExecutor<Quantity> queryDsl) {
+        super(repo, mapper, appUtils, queryDsl);
         this.quantityRepository = repo;
     }
 

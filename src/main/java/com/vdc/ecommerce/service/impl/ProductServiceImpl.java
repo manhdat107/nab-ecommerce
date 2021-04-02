@@ -22,6 +22,7 @@ import com.vdc.ecommerce.service.QuantityService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -39,9 +40,10 @@ public class ProductServiceImpl extends ProductService {
     private final QuantityMapper quantityMapper;
 
     public ProductServiceImpl(ProductRepository repository, ProductMapper productMapper, AppUtils appUtils,
+                              QuerydslPredicateExecutor<Product> queryDsl,
                               BranchRepository branchRepository, QuantityService quantityService,
                               ProductPredicate productPredicate, QuantityMapper quantityMapper) {
-        super(repository, productMapper, appUtils);
+        super(repository, productMapper, appUtils, queryDsl);
         this.branchRepository = branchRepository;
         this.quantityService = quantityService;
         this.productPredicate = productPredicate;
@@ -97,32 +99,32 @@ public class ProductServiceImpl extends ProductService {
         productRepository.save(product);
         return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage());
     }
-
-    @Override
-    public ResponseModel<List<ProductDTO>> findByPredicate(MetricSearch metricSearch) {
-        Pageable pageable;
-        int pageNum = (metricSearch == null || metricSearch.getPage() == null) ? PageConstant.PAGE_DEFAULT.getNum() : metricSearch.getPage();
-        int pageSize = (metricSearch == null || metricSearch.getPageSize() == null || metricSearch.getPageSize() == 0)
-                ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : metricSearch.getPageSize();
-
-        if (metricSearch == null) {
-            return getAll(pageNum, pageSize, null, false);
-        } else {
-
-            if (metricSearch.getField() == null || metricSearch.getField().isEmpty()) {
-                pageable = PageRequest.of(pageNum, pageSize);
-            } else {
-                pageable = appUtils.getPageable(pageNum, pageSize, metricSearch.getField(), metricSearch.isDest());
-            }
-
-            Predicate predicate = productPredicate.findByMetricFilter(metricSearch);
-            Page<Product> pProduct = productRepository.findAll(predicate, pageable);
-
-            List<ProductDTO> productDTOS = mapper.toDTOs(pProduct.getContent());
-            ResponsePageableModel<ProductDTO> dResponsePageableModel = new ResponsePageableModel<ProductDTO>(productDTOS, pProduct.getPageable(), pProduct.getTotalElements());
-            return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), dResponsePageableModel);
-        }
-    }
+//
+//    @Override
+//    public ResponseModel<List<ProductDTO>> findByPredicate(MetricSearch metricSearch) {
+//        Pageable pageable;
+//        int pageNum = (metricSearch == null || metricSearch.getPage() == null) ? PageConstant.PAGE_DEFAULT.getNum() : metricSearch.getPage();
+//        int pageSize = (metricSearch == null || metricSearch.getPageSize() == null || metricSearch.getPageSize() == 0)
+//                ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : metricSearch.getPageSize();
+//
+//        if (metricSearch == null) {
+//            return getAll(pageNum, pageSize, null, false);
+//        } else {
+//
+//            if (metricSearch.getField() == null || metricSearch.getField().isEmpty()) {
+//                pageable = PageRequest.of(pageNum, pageSize);
+//            } else {
+//                pageable = appUtils.getPageable(pageNum, pageSize, metricSearch.getField(), metricSearch.isDest());
+//            }
+//
+//            Predicate predicate = productPredicate.findByMetricFilter(metricSearch);
+//            Page<Product> pProduct = productRepository.findAll(predicate, pageable);
+//
+//            List<ProductDTO> productDTOS = mapper.toDTOs(pProduct.getContent());
+//            ResponsePageableModel<ProductDTO> dResponsePageableModel = new ResponsePageableModel<ProductDTO>(productDTOS, pProduct.getPageable(), pProduct.getTotalElements());
+//            return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), dResponsePageableModel);
+//        }
+//    }
 
     @Override
     public List<Product> findByIds(List<Long> ids) {

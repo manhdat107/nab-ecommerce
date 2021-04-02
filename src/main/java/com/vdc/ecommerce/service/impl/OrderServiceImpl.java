@@ -10,6 +10,7 @@ import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.reposirtory.OrderRepository;
 import com.vdc.ecommerce.service.OrderService;
 import com.vdc.ecommerce.service.ProductService;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,8 +27,9 @@ public class OrderServiceImpl extends OrderService {
     private final OrderRepository orderRepository;
 
     public OrderServiceImpl(OrderRepository repo, OrderMapper mapper, AppUtils appUtils,
+                            QuerydslPredicateExecutor<OrderDetail> queryDsl,
                             ProductService productService) {
-        super(repo, mapper, appUtils);
+        super(repo, mapper, appUtils, queryDsl);
         this.productService = productService;
         this.orderRepository = repo;
     }

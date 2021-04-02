@@ -8,10 +8,11 @@ import com.vdc.ecommerce.model.request.OrderRequest;
 import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.service.impl.BaseServiceImpl;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 public abstract class OrderService extends BaseServiceImpl<OrderDetail, OrderDTO, Long> {
-    public OrderService(JpaRepository<OrderDetail, Long> repo, BaseMapper<OrderDetail, OrderDTO> mapper, AppUtils appUtils) {
-        super(repo, mapper, appUtils);
+    public OrderService(JpaRepository<OrderDetail, Long> repo, BaseMapper<OrderDetail, OrderDTO> mapper, AppUtils appUtils, QuerydslPredicateExecutor<OrderDetail> queryDsl) {
+        super(repo, mapper, appUtils, queryDsl);
     }
 
     public abstract ResponseModel<String> order(OrderRequest orderRequest) throws Exception;
