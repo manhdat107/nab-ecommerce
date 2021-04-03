@@ -6,13 +6,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JwtResponse extends BaseEntity {
-    private Long id;
+public class JwtResponse extends BaseEntity<Long> {
     private String token;
     private String type = "Bearer";
 
-    public JwtResponse(Long id, String token) {
-        this.id = id;
+    public JwtResponse(String token) {
         this.token = token;
     }
 

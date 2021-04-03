@@ -62,7 +62,7 @@ public class AccountServiceImpl implements IAccountService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateJwtToken(authentication);
-        return ResponseModel.successful(HttpStatus.OK.toString(), new JwtResponse(user.getId(), jwt));
+        return ResponseModel.successful(HttpStatus.OK.toString(), new JwtResponse(jwt));
     }
 
     @Override
