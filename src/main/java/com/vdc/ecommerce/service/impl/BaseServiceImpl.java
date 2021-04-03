@@ -28,16 +28,13 @@ import java.util.Optional;
  * @param <ID> ID Type
  */
 public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDTO<ID>, ID extends Long> implements IBaseService<D, ID> {
-
     protected JpaRepository<E, ID> repo;
     protected QuerydslPredicateExecutor<E> queryDsl;
     protected BaseMapper<E, D> mapper;
-    protected AppUtils appUtils;
 
-    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper, AppUtils appUtils, QuerydslPredicateExecutor<E> queryDsl) {
+    public BaseServiceImpl(JpaRepository<E, ID> repo, BaseMapper<E, D> mapper, QuerydslPredicateExecutor<E> queryDsl) {
         this.repo = repo;
         this.mapper = mapper;
-        this.appUtils = appUtils;
         this.queryDsl = queryDsl;
     }
 
@@ -75,7 +72,7 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDT
             pageable = PageRequest.of(pageNum == null ? PageConstant.PAGE_DEFAULT.getNum() : pageNum,
                     pageSize == null ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : pageSize);
         } else {
-            pageable = appUtils.getPageable(pageNum, pageSize, field, isDesc);
+            pageable = AppUtils.getPageable(pageNum, pageSize, field, isDesc);
         }
 
         Page<E> ePage = repo.findAll(pageable);
@@ -107,25 +104,36 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDT
     @Override
     public ResponseModel<List<D>> findByPredicate(MetricSearch metricSearch, Predicate predicate) {
         Pageable pageable;
-        int pageNum = (metricSearch == null || metricSearch.getPage() == null) ? PageConstant.PAGE_DEFAULT.getNum() : metricSearch.getPage();
-        int pageSize = (metricSearch == null || metricSearch.getPageSize() == null || metricSearch.getPageSize() == 0)
-                ? PageConstant.PAGE_SIZE_DEFAULT.getNum() : metricSearch.getPageSize();
-
-        if (metricSearch == null) {
-            return getAll(pageNum, pageSize, null, false);
-        } else {
-
-            if (metricSearch.getField() == null || metricSearch.getField().isEmpty()) {
-                pageable = PageRequest.of(pageNum, pageSize);
+        int page = 0;
+        int pageSize = 0;
+        String sortField = null;
+        Boolean isDesc = null;
+        if (metricSearch != null) {
+            if (metricSearch.getPage() != null) {
+                page = metricSearch.getPage();
             } else {
-                pageable = appUtils.getPageable(pageNum, pageSize, metricSearch.getField(), metricSearch.isDest());
+                page = PageConstant.PAGE_DEFAULT.getNum();
             }
-
-            Page<E> pResult = queryDsl.findAll(predicate, pageable);
-
-            List<D> rsDTOs = mapper.toDTOs(pResult.getContent());
-            ResponsePageableModel<D> dResponsePageableModel = new ResponsePageableModel<D>(rsDTOs, pResult.getPageable(), pResult.getTotalElements());
-            return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), dResponsePageableModel);
+            if (metricSearch.getPageSize() != null && metricSearch.getPageSize() != 0) {
+                pageSize = metricSearch.getPageSize();
+            } else {
+                pageSize = PageConstant.PAGE_SIZE_DEFAULT.getNum();
+            }
+            if (metricSearch.getField() != null && !metricSearch.getField().isEmpty()) {
+                sortField = metricSearch.getField();
+                isDesc = metricSearch.isDest();
+            }
         }
+        pageable = AppUtils.getPageable(page, pageSize, sortField, isDesc);
+
+        Page<E> pResult = queryDsl.findAll(predicate, pageable);
+
+        List<D> rsDTOs = mapper.toDTOs(pResult.getContent());
+        ResponsePageableModel<D> dResponsePageableModel = new ResponsePageableModel<D>(rsDTOs, pResult.getPageable(), pResult.getTotalElements());
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), dResponsePageableModel);
+    }
+
+    private E createContents(Class<E> clazz) throws IllegalAccessException, InstantiationException {
+        return clazz.newInstance();
     }
 }

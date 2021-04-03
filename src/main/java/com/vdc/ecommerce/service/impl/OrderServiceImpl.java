@@ -1,6 +1,5 @@
 package com.vdc.ecommerce.service.impl;
 
-import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.common.ResponseMessage;
 import com.vdc.ecommerce.model.OrderDetail;
 import com.vdc.ecommerce.model.Product;
@@ -26,10 +25,10 @@ public class OrderServiceImpl extends OrderService {
     private final ProductService productService;
     private final OrderRepository orderRepository;
 
-    public OrderServiceImpl(OrderRepository repo, OrderMapper mapper, AppUtils appUtils,
+    public OrderServiceImpl(OrderRepository repo, OrderMapper mapper,
                             QuerydslPredicateExecutor<OrderDetail> queryDsl,
                             ProductService productService) {
-        super(repo, mapper, appUtils, queryDsl);
+        super(repo, mapper, queryDsl);
         this.productService = productService;
         this.orderRepository = repo;
     }

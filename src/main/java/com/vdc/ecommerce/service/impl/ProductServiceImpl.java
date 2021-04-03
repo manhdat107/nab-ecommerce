@@ -1,7 +1,6 @@
 package com.vdc.ecommerce.service.impl;
 
 import com.querydsl.core.types.Predicate;
-import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.common.ResponseMessage;
 import com.vdc.ecommerce.model.Branch;
 import com.vdc.ecommerce.model.Product;
@@ -33,11 +32,10 @@ public class ProductServiceImpl extends ProductService {
     private final ProductRepository productRepository;
     private final QuantityMapper quantityMapper;
 
-    public ProductServiceImpl(ProductRepository repository, ProductMapper productMapper, AppUtils appUtils,
-                              QuerydslPredicateExecutor<Product> queryDsl,
+    public ProductServiceImpl(ProductRepository repository, ProductMapper productMapper, QuerydslPredicateExecutor<Product> queryDsl,
                               BranchRepository branchRepository, QuantityService quantityService,
                               ProductPredicate productPredicate, QuantityMapper quantityMapper) {
-        super(repository, productMapper, appUtils, queryDsl);
+        super(repository, productMapper, queryDsl);
         this.branchRepository = branchRepository;
         this.quantityService = quantityService;
         this.productPredicate = productPredicate;

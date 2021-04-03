@@ -1,6 +1,5 @@
 package com.vdc.ecommerce.service.impl;
 
-import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.model.Branch;
 import com.vdc.ecommerce.model.mapper.BranchMapper;
 import com.vdc.ecommerce.reposirtory.BranchRepository;
@@ -11,8 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class BranchServiceImpl extends BranchService {
 
-    public BranchServiceImpl(BranchRepository repo, BranchMapper mapper, AppUtils appUtils,
+    public BranchServiceImpl(BranchRepository repo, BranchMapper mapper,
                              QuerydslPredicateExecutor<Branch> queryDsl) {
-        super(repo, mapper, appUtils, queryDsl);
+        super(repo, mapper, queryDsl);
     }
 }

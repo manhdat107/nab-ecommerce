@@ -1,6 +1,5 @@
 package com.vdc.ecommerce.service.impl;
 
-import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.model.Quantity;
 import com.vdc.ecommerce.model.mapper.QuantityMapper;
 import com.vdc.ecommerce.reposirtory.QuantityRepository;
@@ -13,8 +12,8 @@ public class QuantityServiceImpl extends QuantityService {
 
     private final QuantityRepository quantityRepository;
 
-    public QuantityServiceImpl(QuantityRepository repo, QuantityMapper mapper, AppUtils appUtils, QuerydslPredicateExecutor<Quantity> queryDsl) {
-        super(repo, mapper, appUtils, queryDsl);
+    public QuantityServiceImpl(QuantityRepository repo, QuantityMapper mapper, QuerydslPredicateExecutor<Quantity> queryDsl) {
+        super(repo, mapper, queryDsl);
         this.quantityRepository = repo;
     }
 

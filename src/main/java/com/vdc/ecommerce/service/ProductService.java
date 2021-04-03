@@ -1,6 +1,5 @@
 package com.vdc.ecommerce.service;
 
-import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.model.Product;
 import com.vdc.ecommerce.model.dto.ProductDTO;
 import com.vdc.ecommerce.model.mapper.ProductMapper;
@@ -13,8 +12,8 @@ import java.util.List;
 
 public abstract class ProductService extends BaseServiceImpl<Product, ProductDTO, Long> {
 
-    public ProductService(ProductRepository repository, ProductMapper productMapper, AppUtils appUtils, QuerydslPredicateExecutor<Product> queryDsl) {
-        super(repository, productMapper, appUtils, queryDsl);
+    public ProductService(ProductRepository repository, ProductMapper productMapper, QuerydslPredicateExecutor<Product> queryDsl) {
+        super(repository, productMapper, queryDsl);
     }
 
     public abstract ResponseModel<String> addProduct(ProductDTO productDTO);

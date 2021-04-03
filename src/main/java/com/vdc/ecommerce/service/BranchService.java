@@ -1,6 +1,5 @@
 package com.vdc.ecommerce.service;
 
-import com.vdc.ecommerce.common.AppUtils;
 import com.vdc.ecommerce.model.Branch;
 import com.vdc.ecommerce.model.dto.BranchDTO;
 import com.vdc.ecommerce.model.mapper.BaseMapper;
@@ -10,8 +9,8 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 public abstract class BranchService extends BaseServiceImpl<Branch, BranchDTO, Long> {
 
-    public BranchService(JpaRepository<Branch, Long> repo, BaseMapper<Branch, BranchDTO> mapper, AppUtils appUtils,
+    public BranchService(JpaRepository<Branch, Long> repo, BaseMapper<Branch, BranchDTO> mapper,
                          QuerydslPredicateExecutor<Branch> queryDsl) {
-        super(repo, mapper, appUtils, queryDsl);
+        super(repo, mapper, queryDsl);
     }
 }
