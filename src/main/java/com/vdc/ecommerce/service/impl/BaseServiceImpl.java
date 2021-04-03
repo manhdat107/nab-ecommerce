@@ -88,7 +88,7 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDT
     public ResponseModel<D> getById(ID id) {
         Optional<E> eOptional = repo.findById(id);
         if (!eOptional.isPresent()) {
-            return ResponseModel.failure(ResponseMessage.NOT_FOUND.getMessage(), 500);
+            return ResponseModel.failure(ResponseMessage.NOT_FOUND.getMessage(), 404);
         }
         D d = mapper.toDTO(eOptional.get());
         return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), d);
@@ -121,10 +121,10 @@ public abstract class BaseServiceImpl<E extends BaseEntity<ID>, D extends BaseDT
                 pageable = appUtils.getPageable(pageNum, pageSize, metricSearch.getField(), metricSearch.isDest());
             }
 
-            Page<E> pProduct = queryDsl.findAll(predicate, pageable);
+            Page<E> pResult = queryDsl.findAll(predicate, pageable);
 
-            List<D> productDTOS = mapper.toDTOs(pProduct.getContent());
-            ResponsePageableModel<D> dResponsePageableModel = new ResponsePageableModel<D>(productDTOS, pProduct.getPageable(), pProduct.getTotalElements());
+            List<D> rsDTOs = mapper.toDTOs(pResult.getContent());
+            ResponsePageableModel<D> dResponsePageableModel = new ResponsePageableModel<D>(rsDTOs, pResult.getPageable(), pResult.getTotalElements());
             return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage(), dResponsePageableModel);
         }
     }

@@ -5,8 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,14 +24,11 @@ public class Product extends BaseEntity<Long> {
     private Branch branch;
 
     @OneToOne(fetch = FetchType.LAZY,
-            cascade =  CascadeType.ALL,
+            cascade = CascadeType.ALL,
             mappedBy = "product")
     private Quantity quantity;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "order_product",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private Set<OrderDetail> orderDetails = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "products")
+    private List<OrderDetail> orderDetails;
 
 }

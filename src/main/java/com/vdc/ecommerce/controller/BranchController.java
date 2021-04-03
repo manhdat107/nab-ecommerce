@@ -8,7 +8,7 @@ import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(ApiConstant.BRANCH)
+@RequestMapping(ApiConstant.ADMIN + ApiConstant.BRANCH)
 @Api(tags = "Branch management")
 public class BranchController {
 

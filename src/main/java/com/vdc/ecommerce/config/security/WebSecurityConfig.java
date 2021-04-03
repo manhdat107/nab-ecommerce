@@ -29,18 +29,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private static final String[] IGNORE_PATTERN = {
-            "/account/**",
-            "/home/**",
-            "/product/*"
+            "/customer/**",
+            "/auth/**",
     };
 
     private static final String[] USER_ROLE_PATTERN = {
-            "/api/user/**"
+            "/user/**"
     };
     private static final String[] ADMIN_ROLE_PATTERN = {
-            "/api/admin/**",
-            "/api/admin/**",
-            "/product/**"
+            "/admin/**"
     };
 
     @Bean

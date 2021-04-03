@@ -44,7 +44,7 @@ public class OrderServiceImpl extends OrderService {
         List<OrderRequest.ProductOrder> productOrders = orderRequest.getProductOrders();
 
         boolean isValidOrderDetail = validOrderDetail(productOrders);
-        if(!isValidOrderDetail) {
+        if (!isValidOrderDetail) {
             return ResponseModel.failure("Order detail is not valid");
         }
         List<Long> productsId = productOrders.stream().map(OrderRequest.ProductOrder::getProductId).collect(Collectors.toList());
@@ -111,11 +111,11 @@ public class OrderServiceImpl extends OrderService {
     }
 
     private boolean validOrderDetail(List<OrderRequest.ProductOrder> productOrder) {
-        if(productOrder.isEmpty()) {
+        if (productOrder.isEmpty()) {
             return false;
         }
-        for(OrderRequest.ProductOrder po: productOrder) {
-            if(po.getProductId() == null || po.getQuantity() <= 0) {
+        for (OrderRequest.ProductOrder po : productOrder) {
+            if (po.getProductId() == null || po.getQuantity() <= 0) {
                 return false;
             }
         }

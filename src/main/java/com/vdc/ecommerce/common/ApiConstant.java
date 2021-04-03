@@ -10,7 +10,7 @@ public class ApiConstant {
     public static final String QUANTITY = "/quantity";
     public static final String ORDER = "/order";
 
-    public static final String ACCOUNT = "/account";
+    public static final String AUTH = "/auth";
     public static final String SIGN_IN = "/signin";
     public static final String SIGN_UP = "/signup";
 

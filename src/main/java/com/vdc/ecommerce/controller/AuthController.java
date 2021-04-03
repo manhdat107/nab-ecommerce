@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Api(tags = "Account controller")
-@RequestMapping(ApiConstant.ACCOUNT)
-public class WebController {
+@RequestMapping(ApiConstant.AUTH)
+public class AuthController {
     private final IAccountService accountService;
 
-    public WebController(IAccountService accountService) {
+    public AuthController(IAccountService accountService) {
         this.accountService = accountService;
     }
 
