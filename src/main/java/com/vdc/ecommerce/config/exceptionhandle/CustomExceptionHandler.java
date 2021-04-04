@@ -31,6 +31,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseModel.failure(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value());
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public final ResponseEntity<?> runtimeException(Exception ex, WebRequest request) {
+//        return ResponseModel.failure(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.badRequest().body(ex.getLocalizedMessage());
+    }
+
     @ExceptionHandler(ValidException.class)
     public final ResponseModel<?> handleUserNotFoundException(ValidException ex, WebRequest request) {
         return ResponseModel.failure(ex.getLocalizedMessage(), HttpStatus.NOT_FOUND.value());

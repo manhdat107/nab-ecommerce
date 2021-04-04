@@ -70,6 +70,10 @@ public class AccountServiceImpl implements IAccountService {
         if (!signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword())) {
             return ResponseModel.failure("Those passwords did not match.");
         }
+
+        if (!signUpRequest.getPassword().matches("\\S+$")) {
+            return ResponseModel.failure("Password can not contain while space");
+        }
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseModel.failure("Username is already exists, Please try again");
         }

@@ -9,15 +9,24 @@ import java.util.Set;
 @Getter
 @Setter
 public class SignUpRequest {
-    @NotBlank
-    @NotEmpty(message = "Please input your name")
-    @Size(max = 50)
-    private String name;
+
+    @Size(min = 6, max = 50)
+    @NotBlank(message = "Username can not have blank")
+    @NotEmpty(message = "Username can not empty")
+    @NotNull(message = "Username must not be null")
+    private String username;
+
+    @Size(min = 6, max = 40, message = "Minimum password length is 6 chars")
+    @NotBlank(message = "Full name must not have blank")
+    @NotNull(message = "Full name must not be null")
+    private String password;
 
     @NotBlank
-    @NotEmpty(message = "Username can not empty")
-    @Size(min = 6, max = 50)
-    private String username;
+    private String confirmPassword;
+
+    @NotEmpty(message = "Full name must not be empty")
+    @Size(max = 50)
+    private String fullName;
 
     @NotBlank
     @Size(max = 60)
@@ -26,18 +35,9 @@ public class SignUpRequest {
 
     private Set<String> roles;
 
-    @NotBlank
-    @Size(min = 6, max = 40, message = "Minimum password length is 6 chars")
-    private String password;
-
-    @NotBlank
-    private String confirmPassword;
-
-    @NotNull
-    private String fullName;
-
     private String address;
 
+    @Size(min = 9, max= 12, message = "Phone number is not valid")
     private Long phoneNumber;
 
 }

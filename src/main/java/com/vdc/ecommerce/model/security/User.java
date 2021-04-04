@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,18 +13,20 @@ import java.util.Set;
 @Getter
 @Setter
 public class User extends BaseEntity<Long> {
-    @NotEmpty(message = "username may be not empty.")
-    @NotBlank(message = "username may be not blank.")
-    @Size(min = 4, message = "must be at least 4 characters")
+
+    @Size(min = 6, message = "Username must be at least 6 characters")
+    @Pattern(regexp = "\\S+$", message = "Username is mandatory, cannot contain space")
+    @NotNull(message = "Username must not be null")
     private String username;
 
-    @NotEmpty(message = "password may be not empty.")
-    @NotBlank(message = "password may be not blank.")
-    @Size(min = 4, message = "must be at least 4 characters")
+    @NotNull(message = "Password must not be null")
     private String password;
+
     @Email(message = "Email Invalid, please try again.")
     private String email;
     private Long phoneNumber;
+
+    @NotEmpty(message = "Full name must not be empty")
     private String fullName;
     private String address;
 
