@@ -1,5 +1,7 @@
 package com.vdc.ecommerce.service.impl;
 
+import com.vdc.ecommerce.common.AppUtils;
+import com.vdc.ecommerce.common.AuthenticationProvider;
 import com.vdc.ecommerce.common.ResponseMessage;
 import com.vdc.ecommerce.common.RoleConstant;
 import com.vdc.ecommerce.config.security.JwtProvider;
@@ -21,10 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -108,18 +106,10 @@ public class AccountServiceImpl implements IAccountService {
         });
 
         user.setRoles(roles);
-        validatorUser(user);
+        user.setAuthProvider(AuthenticationProvider.LOCAL);
+        AppUtils.validatorUser(user);
         userRepository.save(user);
         return ResponseModel.successful(HttpStatus.OK.toString());
     }
 
-    public void validatorUser(User user) {
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        Validator validator = validatorFactory.getValidator();
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        for (ConstraintViolation<User> violation : violations) {
-            log.error(violation.getMessage());
-            throw new RuntimeException(violation.getMessage());
-        }
-    }
 }

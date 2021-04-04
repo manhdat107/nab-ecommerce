@@ -1,5 +1,7 @@
 package com.vdc.ecommerce.config.security;
 
+import com.vdc.ecommerce.OAuth2.UserOAuth2;
+import com.vdc.ecommerce.OAuth2.UserOAuth2Service;
 import com.vdc.ecommerce.service.impl.UserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,17 +22,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final UserOAuth2Service oAuth2Service;
+
     private final UserDetailServiceImpl userDetailService;
     private final JwtEntryPoint jwtEntryPoint;
 
-    WebSecurityConfig(UserDetailServiceImpl userDetailService, JwtEntryPoint jwtEntryPoint) {
+    WebSecurityConfig(UserDetailServiceImpl userDetailService, JwtEntryPoint jwtEntryPoint, UserOAuth2Service oAuth2Service) {
         this.userDetailService = userDetailService;
         this.jwtEntryPoint = jwtEntryPoint;
+        this.oAuth2Service = oAuth2Service;
     }
 
     private static final String[] IGNORE_PATTERN = {
             "/customer/**",
             "/auth/**",
+            "/login/**",
     };
 
     private static final String[] USER_ROLE_PATTERN = {
@@ -73,7 +79,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .oauth2Login().loginPage("/login").userInfoEndpoint().userService(oAuth2Service)
+                .and()
+                .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                    UserOAuth2 userOAuth2 = (UserOAuth2) authentication.getPrincipal();
+                    userDetailService.processOAuthPostLogin(userOAuth2, passwordEncoder());
+                    httpServletResponse.sendRedirect("/swagger-ui.html");
+                });
 
         http.addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

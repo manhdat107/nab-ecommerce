@@ -1,5 +1,6 @@
 package com.vdc.ecommerce.model.security;
 
+import com.vdc.ecommerce.common.AuthenticationProvider;
 import com.vdc.ecommerce.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,9 @@ public class User extends BaseEntity<Long> {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @Enumerated(EnumType.STRING)
+    private AuthenticationProvider authProvider;
 
     public User() {
     }

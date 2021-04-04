@@ -1,4 +1,14 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 1608856332637414
+            client-secret: 096877fa6b8bb3ed9700e4ae9ec17c51
+            scope:
+              - email
+              - public_profile
   jpa:
     hibernate:
       ddl-auto: create
