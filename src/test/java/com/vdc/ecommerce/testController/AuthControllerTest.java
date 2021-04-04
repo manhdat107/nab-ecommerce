@@ -2,7 +2,6 @@ package com.vdc.ecommerce.testController;
 
 import com.google.gson.Gson;
 import com.vdc.ecommerce.model.request.SignInRequest;
-import com.vdc.ecommerce.model.security.JwtResponse;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,19 +25,64 @@ public class AuthControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    private static final String LOGIN_URL = "/auth/signin";
+
     @Test
-    public void loginNotValid() throws Exception {
+    public void inValidUsername() throws Exception {
         SignInRequest signInRequest = new SignInRequest();
         signInRequest.setUsername("asd");
-        signInRequest.setPassword("asd");
-
-        String request = GSON.toJson(signInRequest);
-
-        mvc.perform(MockMvcRequestBuilders.post("/auth/signin").content(request).contentType(MediaType.APPLICATION_JSON))
-
+        signInRequest.setPassword("aaaaaaaaaaaaa");
+        String request = toJson(signInRequest);
+        mvc.perform(MockMvcRequestBuilders.post(LOGIN_URL).content(request).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.meta.message", Matchers.is("User Not Found")));
+
+
+        // username is empty
+        signInRequest.setUsername("");
+        request = toJson(signInRequest);
+        mvc.perform(MockMvcRequestBuilders.post(LOGIN_URL).content(request).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.meta.message", Matchers.is("User Not Found")));
+
+
+        // username is null
+        signInRequest.setUsername(null);
+        request = toJson(signInRequest);
+        mvc.perform(MockMvcRequestBuilders.post(LOGIN_URL).content(request).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.meta.message", Matchers.is("User Not Found")));
+
+    }
+
+
+    @Test
+    public void invalidPassword() throws Exception {
+        SignInRequest signInRequest = new SignInRequest();
+        signInRequest.setUsername("admin");
+        signInRequest.setPassword("asd");
+        String request = toJson(signInRequest);
+        mvc.perform(MockMvcRequestBuilders.post(LOGIN_URL).content(request).contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        // password is empty
+        signInRequest.setPassword("");
+        request = toJson(signInRequest);
+        mvc.perform(MockMvcRequestBuilders.post(LOGIN_URL).content(request).contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        // password is null
+        signInRequest.setPassword(null);
+        request = toJson(signInRequest);
+        mvc.perform(MockMvcRequestBuilders.post(LOGIN_URL).content(request).contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
     }
 
     @Test
@@ -54,5 +98,10 @@ public class AuthControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data.token", Matchers.is(Matchers.not(Matchers.nullValue()))));
+    }
+
+
+    private String toJson(SignInRequest signInRequest) {
+        return GSON.toJson(signInRequest);
     }
 }

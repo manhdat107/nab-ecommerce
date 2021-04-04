@@ -5,10 +5,12 @@ import com.vdc.ecommerce.model.response.ResponseModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -21,6 +23,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseModel<?> handleAllExceptions(Exception ex, WebRequest request) {
         return ResponseModel.failure(ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public final ResponseModel<?> badCredentialsException(Exception ex, WebRequest request) {
+        return ResponseModel.failure(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value());
     }
 
     @ExceptionHandler(ValidException.class)
