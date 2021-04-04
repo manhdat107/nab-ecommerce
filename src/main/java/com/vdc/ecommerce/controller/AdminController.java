@@ -37,8 +37,8 @@ public class AdminController {
         return productService.update(productDTO);
     }
 
-    @DeleteMapping(ApiConstant.PRODUCT + ApiConstant.DELETE)
-    public ResponseModel<?> deleteProduct(@RequestParam("id") Long productId) {
+    @DeleteMapping(ApiConstant.PRODUCT + ApiConstant.DELETE + "/{productId}")
+    public ResponseModel<?> deleteProduct(@PathVariable("productId") Long productId) {
         return productService.deleteById(productId);
     }
 

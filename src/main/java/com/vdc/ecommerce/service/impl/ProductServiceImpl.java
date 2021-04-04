@@ -45,6 +45,10 @@ public class ProductServiceImpl extends ProductService {
 
     @Override
     public ResponseModel<String> addProduct(ProductDTO productDTO) {
+
+        if(productDTO.getBranch() == null){
+            return ResponseModel.failure("Branch can not null");
+        }
         Long branchId = productDTO.getBranch().getId();
 
         Optional<Branch> branch = branchRepository.findById(branchId);
@@ -56,11 +60,17 @@ public class ProductServiceImpl extends ProductService {
 
         if (productDTO.getQuantityDTO() != null) {
             QuantityDTO quantityDTO = new QuantityDTO();
+            Long qtt = productDTO.getQuantityDTO().getQuantity();
+            if(qtt == null || qtt.compareTo(0L) <= 0 ) {
+                return ResponseModel.failure("Quantity must be more than 0");
+            }
             quantityDTO.setQuantity(productDTO.getQuantityDTO().getQuantity());
 
             Quantity quantity = quantityMapper.toEntity(quantityDTO);
             product.setQuantity(quantity);
             quantity.setProduct(product);
+        } else {
+            return ResponseModel.failure("Quantity can not null");
         }
         productRepository.save(product);
 
@@ -71,6 +81,9 @@ public class ProductServiceImpl extends ProductService {
     public ResponseModel<String> updateQuantity(Long productId, Long quantity) {
         if (productId == null) {
             return ResponseModel.failure("Product can not null");
+        }
+        if (quantity == null || quantity.compareTo(0L) <= 0) {
+            return ResponseModel.failure("Quantity can not less than 0");
         }
         Optional<Product> productOptional = productRepository.findById(productId);
         if (!productOptional.isPresent()) {
