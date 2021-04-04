@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 public class Product extends BaseEntity<Long> {
 
+    @NotEmpty(message = "Product Name can not Empty")
+    @NotNull(message = "Product Name Can not null")
     private String name;
 
     @Enumerated(EnumType.STRING)
