@@ -9,6 +9,7 @@ import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.service.OrderService;
 import com.vdc.ecommerce.service.ProductService;
 import io.swagger.annotations.Api;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,8 +41,8 @@ public class CustomerController {
     }
 
     @PostMapping(ApiConstant.ORDER + ApiConstant.ADD)
-    public ResponseModel<?> order(@Valid @RequestBody OrderRequest orderRequest) throws Exception {
-        return orderService.order(orderRequest);
+    public ResponseModel<?> order(@Valid @RequestBody OrderRequest orderRequest, Authentication authentication) throws Exception {
+        return orderService.order(orderRequest, authentication);
     }
 
     @GetMapping(ApiConstant.ORDER)

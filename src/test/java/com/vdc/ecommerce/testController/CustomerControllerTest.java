@@ -93,7 +93,7 @@ public class CustomerControllerTest {
         OrderRequest orderRequest = orderRequest();
 
         OrderService orderService = Mockito.mock(OrderService.class);
-        Mockito.when(orderService.order(orderRequest)).thenReturn(ResponseModel.successful(ResponseMessage.SUCCESS.getMessage()));
+        Mockito.when(orderService.order(orderRequest, null)).thenReturn(ResponseModel.successful(ResponseMessage.SUCCESS.getMessage()));
 
         mvc.perform(MockMvcRequestBuilders.post(DO_ORDER).content(toJson(orderRequest)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())

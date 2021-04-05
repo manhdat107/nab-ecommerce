@@ -1,5 +1,6 @@
 package com.vdc.ecommerce.service.impl;
 
+import com.vdc.ecommerce.OAuth2.UserOAuth2;
 import com.vdc.ecommerce.common.ResponseMessage;
 import com.vdc.ecommerce.model.OrderDetail;
 import com.vdc.ecommerce.model.Product;
@@ -10,6 +11,8 @@ import com.vdc.ecommerce.reposirtory.OrderRepository;
 import com.vdc.ecommerce.service.OrderService;
 import com.vdc.ecommerce.service.ProductService;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -35,7 +38,8 @@ public class OrderServiceImpl extends OrderService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public ResponseModel<String> order(OrderRequest orderRequest) throws Exception {
+    public ResponseModel<String> order(OrderRequest orderRequest, Authentication authentication) throws Exception {
+        UserOAuth2 userOAuth2 = (UserOAuth2) authentication.getPrincipal();
 
         if (orderRequest == null || orderRequest.getProductOrders().isEmpty()) {
             return ResponseModel.failure("Please select product");
@@ -79,11 +83,29 @@ public class OrderServiceImpl extends OrderService {
 
         OrderDetail orderDetail = new OrderDetail();
 
+        String fullName = orderRequest.getFullname();
+        if(fullName == null) {
+            if(userOAuth2 != null) {
+                fullName = userOAuth2.getName();
+            } else {
+                ResponseModel.failure("name can not null", HttpStatus.BAD_REQUEST.value());
+            }
+        }
+
+        String email = orderRequest.getEmail();
+        if(email == null) {
+            if(userOAuth2 != null) {
+                email = userOAuth2.getEmail();
+            } else {
+                ResponseModel.failure("Email can not null", HttpStatus.BAD_REQUEST.value());
+            }
+        }
+
         orderDetail.setTotalPrice(totalPrice);
         orderDetail.setAddress(orderRequest.getAddress());
-        orderDetail.setFullname(orderRequest.getFullname());
+        orderDetail.setFullname(fullName);
         orderDetail.setPhoneNumber(orderRequest.getPhoneNumber());
-        orderDetail.setEmail(orderRequest.getEmail());
+        orderDetail.setEmail(email);
         orderDetail.setProducts(products);
         OrderDetail success = orderRepository.save(orderDetail);
 

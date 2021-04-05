@@ -12,17 +12,12 @@ import java.util.List;
 public class OrderRequest {
     private List<ProductOrder> productOrders;
 
-    @NotNull(message = "Name can not null")
     private String fullname;
 
-    @NotNull(message = "Address can not null")
     private String address;
 
-    @NotNull(message = "Phone number can not null.")
     private Long phoneNumber;
 
-    @NotNull
-    @Email(message = "Email Invalid, please try again.")
     private String email;
 
     @Getter
