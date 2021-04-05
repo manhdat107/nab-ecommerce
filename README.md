@@ -78,7 +78,7 @@ All inputs and outputs use JSON format.
   DELETE /admin/branch/delete/{id}      - delete branch by ID
   GET /admin/branch/list                - get list branch
 
-/group
+/customer
   GET /customer/order                   - get order detail
   POST /customer/order/add              - do order
   GET /customer/product                 - product detail
@@ -99,7 +99,7 @@ All inputs and outputs use JSON format.
           "pageSize": 0                 // page size
         }
     ```
-/order
+/product
   POST /admin/order/list               - list order
   POST /admin/product/add              - add new product
   DELETE /admin/product/delete/{id}    - delete product by id
