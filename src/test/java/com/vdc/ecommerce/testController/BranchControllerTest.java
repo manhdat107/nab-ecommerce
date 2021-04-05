@@ -12,6 +12,8 @@ import com.vdc.ecommerce.service.BranchService;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -119,6 +121,10 @@ public class BranchControllerTest {
     @Transactional
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void delete() throws Exception {
+
+        BranchService branchService = Mockito.mock(BranchService.class);
+        Mockito.when(branchService.deleteById(ArgumentMatchers.any(Long.class))).thenReturn(ResponseModel.successful(ResponseMessage.SUCCESS.getMessage()));
+
         mvc.perform(MockMvcRequestBuilders.delete(BRANCH_DELETE + "/{id}", 1L))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
@@ -130,6 +136,9 @@ public class BranchControllerTest {
     @Transactional
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void deleteNotFound() throws Exception {
+
+        BranchService branchService = Mockito.mock(BranchService.class);
+        Mockito.when(branchService.deleteById(ArgumentMatchers.any(Long.class))).thenReturn(ResponseModel.successful(ResponseMessage.NOT_FOUND.getMessage()));
 
         mvc.perform(MockMvcRequestBuilders.delete(BRANCH_DELETE + "/{id}", 9999L))
                 .andExpect(MockMvcResultMatchers.status().isOk())
