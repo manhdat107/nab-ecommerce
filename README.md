@@ -2,7 +2,7 @@
 
 eCommerce application based built using Spring Boot.
 
-##DEMO
+## DEMO
 Deployed to Heroku Cloud:
 
     https://nab-ecommerce-datvm.herokuapp.com
