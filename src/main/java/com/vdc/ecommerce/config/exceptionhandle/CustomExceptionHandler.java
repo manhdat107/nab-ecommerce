@@ -2,6 +2,8 @@ package com.vdc.ecommerce.config.exceptionhandle;
 
 
 import com.vdc.ecommerce.model.response.ResponseModel;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +36,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public final ResponseEntity<?> runtimeException(Exception ex, WebRequest request) {
-//        return ResponseModel.failure(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.badRequest().body(ex.getLocalizedMessage());
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public final ResponseEntity<?> nullPointer(Exception ex, WebRequest request) {
+        ex.printStackTrace();
+        return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ValidException.class)
