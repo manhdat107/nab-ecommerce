@@ -7,11 +7,11 @@ import com.vdc.ecommerce.model.Product;
 import com.vdc.ecommerce.model.mapper.OrderMapper;
 import com.vdc.ecommerce.model.request.OrderRequest;
 import com.vdc.ecommerce.model.response.ResponseModel;
+import com.vdc.ecommerce.model.security.UserPrinciple;
 import com.vdc.ecommerce.reposirtory.OrderRepository;
 import com.vdc.ecommerce.service.OrderService;
 import com.vdc.ecommerce.service.ProductService;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -39,22 +39,15 @@ public class OrderServiceImpl extends OrderService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public ResponseModel<String> order(OrderRequest orderRequest, Authentication authentication) throws Exception {
-        UserOAuth2 userOAuth2 = (UserOAuth2) authentication.getPrincipal();
-
-        if (orderRequest == null || orderRequest.getProductOrders().isEmpty()) {
-            return ResponseModel.failure("Please select product");
+        try {
+            validOrderRequest(orderRequest, authentication);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseModel.failure(e.getMessage());
         }
+
         List<OrderRequest.ProductOrder> productOrders = orderRequest.getProductOrders();
-
-        boolean isValidOrderDetail = validOrderDetail(productOrders);
-        if (!isValidOrderDetail) {
-            return ResponseModel.failure("Order detail is not valid");
-        }
         List<Long> productsId = productOrders.stream().map(OrderRequest.ProductOrder::getProductId).collect(Collectors.toList());
-
-        if (productsId.isEmpty()) {
-            return ResponseModel.failure("Please select product");
-        }
 
         List<Product> products = productService.findByIds(productsId);
         List<Long> productOutOfStock = checkProductStock(products, productOrders);
@@ -83,29 +76,11 @@ public class OrderServiceImpl extends OrderService {
 
         OrderDetail orderDetail = new OrderDetail();
 
-        String fullName = orderRequest.getFullname();
-        if(fullName == null) {
-            if(userOAuth2 != null) {
-                fullName = userOAuth2.getName();
-            } else {
-                ResponseModel.failure("name can not null", HttpStatus.BAD_REQUEST.value());
-            }
-        }
-
-        String email = orderRequest.getEmail();
-        if(email == null) {
-            if(userOAuth2 != null) {
-                email = userOAuth2.getEmail();
-            } else {
-                ResponseModel.failure("Email can not null", HttpStatus.BAD_REQUEST.value());
-            }
-        }
-
         orderDetail.setTotalPrice(totalPrice);
         orderDetail.setAddress(orderRequest.getAddress());
-        orderDetail.setFullname(fullName);
+        orderDetail.setFullname(orderRequest.getFullname());
         orderDetail.setPhoneNumber(orderRequest.getPhoneNumber());
-        orderDetail.setEmail(email);
+        orderDetail.setEmail(orderRequest.getEmail());
         orderDetail.setProducts(products);
         OrderDetail success = orderRepository.save(orderDetail);
 
@@ -116,7 +91,7 @@ public class OrderServiceImpl extends OrderService {
             productService.updateList(products);
         }
 
-        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage());
+        return ResponseModel.successful(ResponseMessage.SUCCESS.getMessage() + " Order Id:" + success.getId());
     }
 
     private List<Long> checkProductStock(List<Product> products, List<OrderRequest.ProductOrder> productOrders) {
@@ -141,6 +116,47 @@ public class OrderServiceImpl extends OrderService {
             }
         }
         return true;
+    }
+
+    private void validOrderRequest(OrderRequest orderRequest, Authentication authentication) throws Exception {
+        UserPrinciple userOAuth2 = null;
+        if (authentication != null) {
+            userOAuth2 = (UserPrinciple) authentication.getPrincipal();
+        }
+
+        if (orderRequest == null || orderRequest.getProductOrders().isEmpty()) {
+            throw new Exception("Please select product.");
+        }
+        List<OrderRequest.ProductOrder> productOrders = orderRequest.getProductOrders();
+
+        boolean isValidOrderDetail = validOrderDetail(productOrders);
+        if (!isValidOrderDetail) {
+            throw new Exception("Order detail is not valid.");
+        }
+        List<Long> productsId = productOrders.stream().map(OrderRequest.ProductOrder::getProductId).collect(Collectors.toList());
+
+        if (productsId.isEmpty()) {
+            throw new Exception("Please select product");
+        }
+
+        String fullName = orderRequest.getFullname();
+        String email = orderRequest.getEmail();
+
+        if (fullName == null) {
+            if (userOAuth2 != null) {
+                orderRequest.setFullname(userOAuth2.getFullName());
+            } else {
+                throw new Exception("Full name can not null");
+            }
+        }
+        if (email == null) {
+            if (userOAuth2 != null) {
+                orderRequest.setEmail(userOAuth2.getEmail());
+            } else {
+                throw new Exception("Email can not null");
+            }
+        }
+
     }
 
 

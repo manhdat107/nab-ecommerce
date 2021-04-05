@@ -13,7 +13,6 @@ import com.vdc.ecommerce.service.OrderService;
 import com.vdc.ecommerce.service.ProductService;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.junit.jupiter.api.Order;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -21,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -93,12 +94,13 @@ public class CustomerControllerTest {
         OrderRequest orderRequest = orderRequest();
 
         OrderService orderService = Mockito.mock(OrderService.class);
-        Mockito.when(orderService.order(orderRequest, null)).thenReturn(ResponseModel.successful(ResponseMessage.SUCCESS.getMessage()));
+        Authentication authentication = Mockito.mock(Authentication.class);
+        Mockito.when(orderService.order(orderRequest, authentication)).thenReturn(ResponseModel.successful(ResponseMessage.SUCCESS.getMessage()));
 
         mvc.perform(MockMvcRequestBuilders.post(DO_ORDER).content(toJson(orderRequest)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.meta.message", Matchers.is(ResponseMessage.SUCCESS.getMessage())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.meta.message", Matchers.containsString(ResponseMessage.SUCCESS.getMessage())))
                 .andReturn();
 
     }
