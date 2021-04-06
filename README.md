@@ -8,7 +8,7 @@ Deployed to Heroku Cloud:
     https://nab-ecommerce-datvm.herokuapp.com
 
 Note: It is running on a free dyno, so the services go to sleep if not in use. For the first time, it may take some time to respond.
-![Screenshot from running application](image/nab-run.png?raw=true "Screenshot JWT Spring Security Demo")
+![Screenshot from running application](image/NAB-run.png?raw=true "Screenshot JWT Spring Security Demo")
 
 ## Requirements
 This demo is build with Maven 3.6.x and Java 8.

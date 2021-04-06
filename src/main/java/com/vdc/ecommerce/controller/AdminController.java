@@ -9,6 +9,7 @@ import com.vdc.ecommerce.model.response.ResponseModel;
 import com.vdc.ecommerce.service.OrderService;
 import com.vdc.ecommerce.service.ProductService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,27 +27,31 @@ public class AdminController {
         this.orderPredicate = orderPredicate;
         this.orderService = orderService;
     }
-
+    @ApiOperation(value = "Add new Product")
     @PostMapping(ApiConstant.PRODUCT + ApiConstant.ADD)
     public ResponseModel<?> addNewProduct(@RequestBody ProductDTO productDTO) {
         return productService.addProduct(productDTO);
     }
 
+    @ApiOperation(value = "Update exists product")
     @PutMapping(ApiConstant.PRODUCT + ApiConstant.UPDATE)
     public ResponseModel<?> updateProduct(@RequestBody ProductDTO productDTO) {
         return productService.update(productDTO);
     }
 
+    @ApiOperation(value = "Delete exists product")
     @DeleteMapping(ApiConstant.PRODUCT + ApiConstant.DELETE + "/{productId}")
     public ResponseModel<?> deleteProduct(@PathVariable("productId") Long productId) {
         return productService.deleteById(productId);
     }
 
+    @ApiOperation(value = "Update a quantity of product")
     @PutMapping(ApiConstant.PRODUCT + ApiConstant.UPDATE + ApiConstant.QUANTITY)
     public ResponseModel<?> updateProductQuantity(@RequestParam Long productId, @RequestParam Long quantity) {
         return productService.updateQuantity(productId, quantity);
     }
 
+    @ApiOperation(value = "List all the order by paging and search condition")
     @PostMapping(ApiConstant.ORDER + ApiConstant.LIST)
     public ResponseModel<?> getListOrder(@RequestBody(required = false) MetricSearch metricSearch) {
         Predicate predicate = orderPredicate.findByMetricFilter(metricSearch);
