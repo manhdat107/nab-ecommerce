@@ -24,9 +24,9 @@ INSERT INTO `product` (`create_date`, `last_update`,`color`, `name`, `price`, `b
 
 
 -- product quantity default
-INSERT INTO `sql6402572`.`quantity` (`create_date`, `last_update`,`quantity`, `product_id`) VALUES (NOW(), NOW(),'99', '1');
-INSERT INTO `sql6402572`.`quantity` (`create_date`, `last_update`,`quantity`, `product_id`) VALUES (NOW(), NOW(),'50', '2');
-INSERT INTO `sql6402572`.`quantity` (`create_date`, `last_update`,`quantity`, `product_id`) VALUES (NOW(), NOW(),'20', '3');
+INSERT INTO `quantity` (`create_date`, `last_update`,`quantity`, `product_id`) VALUES (NOW(), NOW(),'99', '1');
+INSERT INTO `quantity` (`create_date`, `last_update`,`quantity`, `product_id`) VALUES (NOW(), NOW(),'50', '2');
+INSERT INTO `quantity` (`create_date`, `last_update`,`quantity`, `product_id`) VALUES (NOW(), NOW(),'20', '3');
 
 
 -- user default
