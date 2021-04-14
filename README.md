@@ -5,9 +5,9 @@ eCommerce application based built using Spring Boot.
 ## DEMO
 Deployed to Heroku Cloud:
 
-    https://nab-ecommerce-datvm.herokuapp.com
+    https://nab-datvm.herokuapp.com/swagger-ui.html
 
-Note: It is running on a free dyno, so the services go to sleep if not in use. For the first time, it may take some time to respond.
+Note: It is running on a free dyno, so the services go to sleep if not in use. For the first time, it may take some time to respond or might be not working
 ![Screenshot from running application](image/NAB-run.png?raw=true "Screenshot JWT Spring Security Demo")
 
 ## Requirements
