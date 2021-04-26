@@ -87,7 +87,7 @@ All inputs and outputs use JSON format.
     json search example
         {
           "dest": true,                 // sort by dest
-          "field": "string",            // field wanna sort
+          "field": "string",            // field want to sort
           "metricFilters": [            // list condition filter
             {
               "condition": "string",    // using for number condition ( '<' '>' '=')
