@@ -33,10 +33,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.oAuth2Service = oAuth2Service;
     }
 
-    private static final String[] IGNORE_PATTERN = {
+    private static final String[] FREE_ACCESS_PATTERN = {
             "/customer/**",
             "/auth/**",
             "/login/**",
+    };
+    private static final String[] IGNORE_PATTERN = {
+            "/v2/api-docs",
+            "/configuration/ui",
+            "/swagger-resources/**",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"
     };
 
     private static final String[] USER_ROLE_PATTERN = {
@@ -73,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers(IGNORE_PATTERN).permitAll()
+                .antMatchers(FREE_ACCESS_PATTERN).permitAll()
                 .antMatchers(USER_ROLE_PATTERN).hasAnyRole("USER", "ADMIN")
                 .antMatchers(ADMIN_ROLE_PATTERN).hasRole("ADMIN")
                 .anyRequest().authenticated()
@@ -94,11 +102,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources/**",
-                "/configuration/security",
-                "/swagger-ui.html",
-                "/webjars/**");
+        web.ignoring().antMatchers(IGNORE_PATTERN);
     }
 }
